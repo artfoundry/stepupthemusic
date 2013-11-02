@@ -1,4 +1,8 @@
 Stepupthemusic::Application.routes.draw do
+
+  root 'players#midi_test'
+  resources :players
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
