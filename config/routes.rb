@@ -1,6 +1,6 @@
 Stepupthemusic::Application.routes.draw do
 
-  root 'players#midi_test'
+  root 'players#sequencer'
   resources :players
 
   # The priority is based upon order of creation: first created -> highest priority.
