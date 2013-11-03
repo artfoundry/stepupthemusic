@@ -32,7 +32,23 @@ function convertNoteIdToInt(event) {
 };
 
 function convertNoteIdToValue(noteId) {
-  var value = noteId - (16 * Math.floor(noteId / 16));
+  var value = noteId - (totalOctaveNotes * Math.floor(noteId / totalOctaveNotes));
+  // factor in half steps in major scale
+  if ((value >= 0) && (value < 3)) {
+    value *= 2;
+  }
+  else if ((value >= 3) && (value < 7)) {
+    value = (value * 2) - 1;
+  }
+  else if ((value >= 7) && (value < 10)) {
+    value = (value * 2) - 2;
+  }
+  else if ((value >= 10) && (value < 14)) {
+    value = (value * 2) - 3;
+  }
+  else {
+    value = (value * 2) - 4;
+  };
   return value;
 };
 
@@ -43,9 +59,9 @@ function calcDelay(tempo){
 
 function Sequence () {
   maxOctave = 2;
-  totalOctaveNotes = maxOctave * 8;
+  totalOctaveNotes = maxOctave * 8 - 1;
   sequenceLength = 16;
-  allNotesInSeq = maxOctave * sequenceLength * 8;
+  allNotesInSeq = totalOctaveNotes * sequenceLength;
   tempo = 120;
   playOn = false;
   notes = [];
@@ -56,7 +72,7 @@ Sequence.prototype.initGrid = function () {
   for (var row = totalOctaveNotes - 1; row >= 0; row--) {
     $("#sequence").append("<div id='row" + row + "'>");
     for (var col = 0; col < sequenceLength; col++) {
-      $("#sequence").append("<button id='" + (row + (col * totalOctaveNotes)) + "'>" + (row + (col * totalOctaveNotes)) + "</button>");
+      $("#sequence").append("<button class='button' id='" + (row + (col * totalOctaveNotes)) + "'>" + (row + (col * totalOctaveNotes)) + "</button>");
     };
     $("#sequence").append("</div>");
   };
@@ -70,13 +86,11 @@ Sequence.prototype.initNotes = function () {
 
 Sequence.prototype.addListener = function () {
   $("#sequence").click(function(event) {
-    // debugger
     if (event.target.id === "play"){
-      console.log("play");
       if (playOn === false) {
         playOn = true;
         playSeq = setInterval(function(){
-          newSeq.playNotes(time);
+          newSeq.playNotes(time, event);
           time === allNotesInSeq ? time = 0 : time += totalOctaveNotes;
         }, calcDelay(tempo));
       }
@@ -93,23 +107,35 @@ Sequence.prototype.addListener = function () {
 };
 
 Sequence.prototype.toggleNote = function (noteId) {
-  console.log(noteId);
   if (notes[noteId] === null) {
     notes[noteId] = convertNoteIdToValue(noteId) + 50; // adding 50 converts an ID of 0 to around A3
+    console.log(event.target.id)
+    $('#' + event.target.id).html('On');
   }
   else {
     notes[noteId] = null;
+        console.log(event.target.id)
+    $('#' + event.target.id).html(event.target.id);
   };
-  console.log(notes[noteId])
+  // console.log(notes[noteId])
 };
 
 Sequence.prototype.playNotes = function (time) {
-  console.log(time, notes[time]);
+  // console.log(time, notes[time]);
   var delay = 0; // play one note every quarter second
-  var note = notes[time]; // the MIDI note
   var velocity = 127; // how hard the note hits
-  // play the note
+  var note = 0;
   MIDI.setVolume(0, 127);
-  MIDI.noteOn(0, note, velocity, delay);
-  MIDI.noteOff(0, note, delay + 0.75);
+  for (var i = 0; i < totalOctaveNotes; i++) {
+    if (notes[i + time]) {
+      note = notes[i + time]; // the MIDI note
+      MIDI.programChange(i, 0); 
+      $('#' + time).addClass('light');
+      setTimeout(function(){
+        $('#' + time).removeClass('light');}, 500);
+      // play the note
+      MIDI.noteOn(0, note, velocity, delay);
+      // MIDI.noteOff(0, note, delay + 0.75);     
+    }
+  };
 };
