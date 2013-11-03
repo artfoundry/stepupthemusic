@@ -14,9 +14,16 @@ $(document).ready(function(){
 });
 
 function initSequencer() {
-  newSeq = new Sequence();
-  newSeq.initNotes();
-  newSeq.addListener();
+  MIDI.loadPlugin({
+    soundfontUrl: "./soundfont/",
+    instrument: "acoustic_grand_piano",
+    callback: function() {
+      newSeq = new Sequence();
+      newSeq.initGrid();
+      newSeq.initNotes();
+      newSeq.addListener();
+    }
+  });
 };
 
 function convertNoteIdToInt(event) {
@@ -36,16 +43,27 @@ function calcDelay(tempo){
 
 function Sequence () {
   maxOctave = 2;
+  totalOctaveNotes = maxOctave * 8;
   sequenceLength = 16;
-  numberOfNotes = maxOctave * sequenceLength * 8;
+  allNotesInSeq = maxOctave * sequenceLength * 8;
   tempo = 120;
   playOn = false;
   notes = [];
   time = 0;
 };
 
+Sequence.prototype.initGrid = function () {
+  for (var row = totalOctaveNotes - 1; row >= 0; row--) {
+    $("#sequence").append("<div id='row" + row + "'>");
+    for (var col = 0; col < sequenceLength; col++) {
+      $("#sequence").append("<button id='" + (row + (col * totalOctaveNotes)) + "'>" + (row + (col * totalOctaveNotes)) + "</button>");
+    };
+    $("#sequence").append("</div>");
+  };
+};
+
 Sequence.prototype.initNotes = function () {
-  for(var i = 0; i < numberOfNotes; i++){
+  for(var i = 0; i < allNotesInSeq; i++){
     notes[i] = null;
   }
 };
@@ -54,12 +72,12 @@ Sequence.prototype.addListener = function () {
   $("#sequence").click(function(event) {
     // debugger
     if (event.target.id === "play"){
-      console.log("play")
+      console.log("play");
       if (playOn === false) {
         playOn = true;
         playSeq = setInterval(function(){
           newSeq.playNotes(time);
-          time === numberOfNotes ? time = 0 : time += 16;
+          time === allNotesInSeq ? time = 0 : time += totalOctaveNotes;
         }, calcDelay(tempo));
       }
       else {
@@ -75,22 +93,23 @@ Sequence.prototype.addListener = function () {
 };
 
 Sequence.prototype.toggleNote = function (noteId) {
-  console.log("note")
-    notes[noteId] === null ? notes[noteId] = convertNoteIdToValue(noteId) + 50 : notes[noteId] = null; 
+  console.log(noteId);
+  if (notes[noteId] === null) {
+    notes[noteId] = convertNoteIdToValue(noteId) + 50; // adding 50 converts an ID of 0 to around A3
+  }
+  else {
+    notes[noteId] = null;
+  };
+  console.log(notes[noteId])
 };
 
 Sequence.prototype.playNotes = function (time) {
-  MIDI.loadPlugin({
-    soundfontUrl: "./soundfont/",
-    instrument: "acoustic_grand_piano",
-    callback: function() {
-      var delay = 0; // play one note every quarter second
-      var note = notes[time]; // the MIDI note
-      var velocity = 127; // how hard the note hits
-      // play the note
-      MIDI.setVolume(0, 127);
-      MIDI.noteOn(0, note, velocity, delay);
-      MIDI.noteOff(0, note, delay + 0.75);
-    }
-  })
-}
+  console.log(time, notes[time]);
+  var delay = 0; // play one note every quarter second
+  var note = notes[time]; // the MIDI note
+  var velocity = 127; // how hard the note hits
+  // play the note
+  MIDI.setVolume(0, 127);
+  MIDI.noteOn(0, note, velocity, delay);
+  MIDI.noteOff(0, note, delay + 0.75);
+};
