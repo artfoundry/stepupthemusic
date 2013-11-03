@@ -2,7 +2,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: 
+  database: postgres
   pool:
   password:
 
@@ -12,13 +12,13 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: 
+  database: postgres
   pool:
   password:
 
 production:
   adapter: postgresql
   encoding: unicode
-  database: 
+  database: postgres
   pool:
   password:
