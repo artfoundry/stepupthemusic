@@ -3,12 +3,6 @@
 // where time is numbered 0-15 (4 bars)
 // Thus, notes are numbered 0-255, which corresponds to the indecies of the notes array
 
-// pseudocode:
-// Listeners: play button starts/stops sequence, note buttons turn note playback on/off
-//   When play is on, loop sequence
-//    At each step in the sequence, play any notes that are on
-
-
 $(document).ready(function(){
   initSequencer();
 });
@@ -90,7 +84,7 @@ Sequence.prototype.addListener = function () {
       if (playOn === false) {
         playOn = true;
         playSeq = setInterval(function(){
-          newSeq.playNotes(time, event);
+          newSeq.playNotes(time);
           time === allNotesInSeq ? time = 0 : time += totalOctaveNotes;
         }, calcDelay(tempo));
       }
@@ -109,19 +103,15 @@ Sequence.prototype.addListener = function () {
 Sequence.prototype.toggleNote = function (noteId) {
   if (notes[noteId] === null) {
     notes[noteId] = convertNoteIdToValue(noteId) + 50; // adding 50 converts an ID of 0 to around A3
-    console.log(event.target.id)
     $('#' + event.target.id).html('On');
   }
   else {
     notes[noteId] = null;
-        console.log(event.target.id)
     $('#' + event.target.id).html(event.target.id);
   };
-  // console.log(notes[noteId])
 };
 
 Sequence.prototype.playNotes = function (time) {
-  // console.log(time, notes[time]);
   var delay = 0; // play one note every quarter second
   var velocity = 127; // how hard the note hits
   var note = 0;
