@@ -83,7 +83,7 @@ Sequence.prototype.addListener = function () {
     if (event.target.id === "play"){
       if (playOn === false) {
         playOn = true;
-        playSeq = setInterval(function(){
+        playSeq = setInterval(function() {
           newSeq.playNotes(time);
           time === allNotesInSeq ? time = 0 : time += totalOctaveNotes;
         }, calcDelay(tempo));
@@ -93,14 +93,14 @@ Sequence.prototype.addListener = function () {
         clearInterval(playSeq);
       };
     }
-    else {
+    else if ($(event.target).hasClass("button")) {
       noteId = convertNoteIdToInt(event);
-      newSeq.toggleNote(noteId);
+      newSeq.toggleNote(noteId, event);
     };
   });
 };
 
-Sequence.prototype.toggleNote = function (noteId) {
+Sequence.prototype.toggleNote = function (noteId, event) {
   if (notes[noteId] === null) {
     notes[noteId] = convertNoteIdToValue(noteId) + 50; // adding 50 converts an ID of 0 to around A3
     $('#' + event.target.id).html('On');
