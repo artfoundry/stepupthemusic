@@ -1,9 +1,25 @@
-.button {
+.note {
   width: 40px;
   height: 25px;
   margin: 5px;
+  border-radius: 4px;
+  border-style: solid;
+  background-color: transparent;
 }
 
-.light {
+.selected {
+  border-style: solid;
+  border-width: 4px;
+  border-color: green;
+}
+
+.lightOn {
   background-color: yellow;
+}
+
+.lightOff {
+  background-color: transparent;
+    transition: background-color .25s ease-in-out;
+  -moz-transition: background-color .25s ease-in-out;
+  -webkit-transition: background-color .25s ease-in-out;
 }
