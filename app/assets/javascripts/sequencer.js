@@ -73,6 +73,7 @@ function initGrid(sequence) {
     };
     $("#sequence").append("</div>");
   };
+  $("#loading").text("");
 };
 
 
