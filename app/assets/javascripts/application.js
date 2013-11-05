@@ -10,7 +10,19 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+// Don't think these are needed
+// require MIDI/AudioDetect
+// require MIDI/LoadPlugin
+// require MIDI/Plugin
+// require MIDI/Player
+// require Window/Event
+// require Window/DOMLoader.XMLHttp
+// require Window/DOMLoader.script
+// require inc/Base64
+// require inc/base64binary
+//
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
