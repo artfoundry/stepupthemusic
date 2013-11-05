@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 function initSequencer() {
   MIDI.loadPlugin({
-    soundfontUrl: "./soundfont/",
+    soundfontUrl: "./assets/soundfont/",
     instrument: "acoustic_grand_piano",
     callback: function() {
       newSeq = new Sequence();
