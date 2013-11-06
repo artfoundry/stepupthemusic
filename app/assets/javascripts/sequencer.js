@@ -26,10 +26,11 @@ function initSequencer() {
                   "tenor_sax", 
                   "trumpet"],
     callback: function() {
-      newSeq = new Sequence();
-      initGrid(newSeq);
-      newSeq.initNotes();
-      newSeq.addListener();
+      newSong = new Song();
+      initGrid(newSong);
+      newSong.initNotes();
+      newSong.addListener();
+      newSong.firebaseNew();
     }
   });
 };
@@ -39,6 +40,7 @@ function convertNoteIdToInt(event) {
   return id;
 };
 
+// Convert to some value between 0 and 14, then adjust to fit scale
 function convertNoteIdToValue(noteId) {
   var value = noteId - (totalOctaveNotes * Math.floor(noteId / totalOctaveNotes));
   // factor in half steps in major scale
@@ -77,33 +79,62 @@ function initGrid(sequence) {
 };
 
 
-function Sequence () {
+function Song () {
   maxOctave = 2;
-  totalOctaveNotes = maxOctave * 8 - 1;
+  totalOctaveNotes = (maxOctave * 8) - 1;
   sequenceLength = 16;
   allNotesInSeq = totalOctaveNotes * sequenceLength;
   currentInstrument = 0; // ie. acoustic grand piano
-  channel = 0; //channel for each instrument
+  sequences = { // each sequence array corresponds to a channel
+    0: [],
+    1: [],
+    2: [],
+    3: []
+  }
+
+  // each user/instrument is assigned 1 channel out of four
+  // this should be assigned by talking to Firebase
+  channel = 0;
+
   tempo = 120;
   playOn = false;
-  notes = [];
   time = 0;
+  stepFBRootRef = null;
 };
 
-Sequence.prototype.initNotes = function () {
+Song.prototype.firebaseNew = function () {
+  stepFBRootRef = new Firebase('https://stepupthemusic.firebaseio.com/');
+};
+
+Song.prototype.firebaseSet = function () {
+  stepFBRootRef.set({channel: channel, notes: sequences[channel].join()});
+  newSong.firebaseGet();
+};
+
+Song.prototype.firebaseGet = function () {
+  stepFBRootRef.on('value', function(snapshot) {
+    sequence = snapshot.val();
+    sequences[sequence.channel] = sequence.notes.split(',');
+    for(var i = 0; i < allNotesInSeq; i++) {
+      sequences[sequence.channel][i] = parseInt(sequences[sequence.channel][i]);
+    };
+  });
+};
+
+Song.prototype.initNotes = function () {
   for(var i = 0; i < allNotesInSeq; i++){
-    notes[i] = null;
+    sequences[channel][i] = -1; // value of -1 means note is off
   }
 };
 
-Sequence.prototype.addListener = function () {
+Song.prototype.addListener = function () {
   $("#sequence").click(function(event) {
     if (event.target.id === "play"){
       if (playOn === false) {
         $("#play").addClass('selected');
         playOn = true;
         playSeq = setInterval(function() {
-          newSeq.playNotes(time);
+          newSong.playNotes(time);
           time === allNotesInSeq ? time = 0 : time += totalOctaveNotes;
         }, calcDelay(tempo));
       }
@@ -115,13 +146,13 @@ Sequence.prototype.addListener = function () {
     }
     else if ($(event.target).hasClass("note")) {
       noteId = convertNoteIdToInt(event);
-      newSeq.toggleNote(noteId, event);
+      newSong.toggleNote(noteId, event);
     }
     else if ($(event.target).hasClass("instrument")) {
       $("#i" + currentInstrument).removeClass('selected');
       currentInstrument = event.target.id.slice(1);
       $("#i" + currentInstrument).addClass('selected');
-    }
+    };
     else if ($(event.target).hasClass("channel")) {
       $("#ch" + channel).removeClass('selected');
       channel = event.target.id.slice(2);
@@ -130,28 +161,28 @@ Sequence.prototype.addListener = function () {
   });
 };
 
-Sequence.prototype.toggleNote = function (noteId, event) {
-  if (notes[noteId] === null) {
-    notes[noteId] = convertNoteIdToValue(noteId) + 50; // adding 50 converts an ID of 0 to around A3
+// currently using notes D3-D5
+Song.prototype.toggleNote = function (noteId, event) {
+  if (sequences[channel][noteId] === -1) {
+    sequences[channel][noteId] = convertNoteIdToValue(noteId) + 50; // adding 50 converts an ID of 0 to D3
     $("#" + noteId).addClass('selected');
-   // $('#' + event.target.id).html('On');
   }
   else {
-    notes[noteId] = null;
+    sequences[channel][noteId] = -1;
     $("#" + noteId).removeClass('selected');
-    // $('#' + event.target.id).html(event.target.id);
   };
+  newSong.firebaseSet();
 };
 
-Sequence.prototype.playNotes = function (time) {
+Song.prototype.playNotes = function (time) {
   var delay = 0; // play one note every quarter second
   var velocity = 127; // how hard the note hits
   var note = 0;
   MIDI.setVolume(0, 127);
   MIDI.programChange(channel, currentInstrument); //channel, program
   for (var i = 0; i < totalOctaveNotes; i++) { // set up new channel for each note played at one time
-    if (notes[i + time]) {
-      note = notes[i + time]; // the MIDI note
+    if (sequences[channel][i + time] > -1) {
+      note = sequences[channel][i + time]; // the MIDI note
       var noteId = time + i
       $('#' + noteId).removeClass('lightOff');
       $('#' + noteId).addClass('lightOn');
