@@ -71,7 +71,8 @@ function initGrid(sequence) {
   for (var row = totalOctaveNotes - 1; row >= 0; row--) {
     $("#sequence").append("<div id='row" + row + "'>");
     for (var col = 0; col < sequenceLength; col++) {
-      $("#sequence").append("<button class='note' id='" + (row + (col * totalOctaveNotes)) + "'>" + (row + (col * totalOctaveNotes)) + "</button>");
+      var buttonId = row + (col * totalOctaveNotes);
+      $("#sequence").append("<button class='note' id='" + buttonId + "'>" + buttonId + "</button>");
     };
     $("#sequence").append("</div>");
   };
@@ -107,7 +108,7 @@ Song.prototype.firebaseNew = function () {
 };
 
 Song.prototype.firebaseSet = function () {
-  stepFBRootRef.set({channel: channel, notes: sequences[channel].join()});
+  stepFBRootRef.set({channel: channel, notes: sequences[channel].join()}); //FB needs string
   newSong.firebaseGet();
 };
 
@@ -116,7 +117,7 @@ Song.prototype.firebaseGet = function () {
     sequence = snapshot.val();
     sequences[sequence.channel] = sequence.notes.split(',');
     for(var i = 0; i < allNotesInSeq; i++) {
-      sequences[sequence.channel][i] = parseInt(sequences[sequence.channel][i]);
+      sequences[sequence.channel][i] = parseInt(sequences[sequence.channel][i]); //FB sends back string
     };
   });
 };
@@ -135,8 +136,8 @@ Song.prototype.addListener = function () {
         playOn = true;
         playSeq = setInterval(function() {
           newSong.playNotes(time);
-          time === allNotesInSeq ? time = 0 : time += totalOctaveNotes;
-        }, calcDelay(tempo));
+          time === allNotesInSeq ? time = 0 : time += totalOctaveNotes; //loop the sequence
+        }, calcDelay(tempo)); // sets the tempo for the song as part of setInterval
       }
       else {
         $("#play").removeClass('selected');
@@ -150,12 +151,12 @@ Song.prototype.addListener = function () {
     }
     else if ($(event.target).hasClass("instrument")) {
       $("#i" + currentInstrument).removeClass('selected');
-      currentInstrument = event.target.id.slice(1);
+      currentInstrument = event.target.id.slice(1); // remove the 'i' in the id selector
       $("#i" + currentInstrument).addClass('selected');
     }
     else if ($(event.target).hasClass("channel")) {
       $("#ch" + channel).removeClass('selected');
-      channel = event.target.id.slice(2);
+      channel = event.target.id.slice(2); // remove the 'ch' in the id selector
       $("#ch" + channel).addClass('selected');
     };
   });
@@ -181,7 +182,7 @@ Song.prototype.playNotes = function (time) {
   MIDI.setVolume(0, 127);
   MIDI.programChange(channel, currentInstrument); //channel, program
   for (var i = 0; i < totalOctaveNotes; i++) { // set up new channel for each note played at one time
-    if (sequences[channel][i + time] > -1) {
+    if (sequences[channel][i + time] > -1) { // play if the note is selected/on
       note = sequences[channel][i + time]; // the MIDI note
       var noteId = time + i
       $('#' + noteId).removeClass('lightOff');
