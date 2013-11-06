@@ -152,7 +152,7 @@ Song.prototype.addListener = function () {
       $("#i" + currentInstrument).removeClass('selected');
       currentInstrument = event.target.id.slice(1);
       $("#i" + currentInstrument).addClass('selected');
-    };
+    }
     else if ($(event.target).hasClass("channel")) {
       $("#ch" + channel).removeClass('selected');
       channel = event.target.id.slice(2);
