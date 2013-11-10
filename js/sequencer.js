@@ -26,12 +26,19 @@ function initSequencer() {
   });
 };
 
+function updateMenubar() {
+  $("#menubar").append("<button id='createsong'>Create New Song</button>");
+  $("#createsong").on("click", function(){
+    event.preventDefault();
+    loadSong();
+  });
+};
+
 function verifyLogin() {
   $("#create").click(function(){
     $("#login").load("views/create_user.html");
     createUser();
   });
-
   var loginFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users');
   $("form").on("submit", function(event) {
     event.preventDefault();
@@ -39,10 +46,7 @@ function verifyLogin() {
     loginFBRef.once('value', function(snapshot) {
       var password = snapshot.child(login[0].value).val();
       if ((password !== null) && (login[1].value === password)) {
-        $("#menubar").append("<button id='createsong'>Create New Song</button>");
-        $("#createsong").on("click", function(){
-          loadSong();
-        });
+        updateMenubar();
       }
       else {
         alert("Your login info is incorrect");
