@@ -1,3 +1,0 @@
-class PlayersController < ApplicationController
-
-end
