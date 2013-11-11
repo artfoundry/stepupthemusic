@@ -30,7 +30,8 @@ function updateMenubar() {
   $("#menubar").append("<button id='createsong'>Create New Song</button>");
   $("#createsong").on("click", function(){
     event.preventDefault();
-    loadSong();
+    var songname = window.prompt("Please enter a song name:")
+    loadSong(songname);
   });
 };
 
@@ -76,7 +77,7 @@ function listSongs() {
  songlistFBRef.on('value', function(snapshot) {
     var songlist = snapshot.val();
     for(var i = 0; i < songlist.length; i++) {
-      $("#songlist").append("<a href=songlist.url>songlist.name</a>");
+      $("#songlist").append("<a href=songlist.url>songlist.songname</a>");
       $("#songlist").click(function(event) {
         event.preventDefault();
         loadSong();
@@ -85,9 +86,10 @@ function listSongs() {
   });
 };
 
-function loadSong() {
-  newSong = new Song();
+function loadSong(songname) {
+  newSong = new Song(songname);
   initGrid(newSong);
+  clearLoginDiv();
   newSong.initNotes();
   newSong.addListeners();
   newSong.firebaseNew();
@@ -125,7 +127,12 @@ function calcDelay(tempo) {
   return delay;
 };
 
+function clearLoginDiv() {
+  $("#login").html("");  
+};
+
 function initGrid(sequence) {
+  $("#loadMessage").html("<h3>" + songname + "</h3>")
   $("#controls").load("views/sequencer.html");
   for (var row = totalOctaveNotes - 1; row >= 0; row--) {
     $("#sequence").append("<div id='row" + row + "'>");
@@ -138,23 +145,21 @@ function initGrid(sequence) {
 };
 
 
-function Song () {
-  name="";
-  url="";
+function Song(songnameArg) {
+  songname = songnameArg;
+  url = "";
   maxOctave = 2;
   totalOctaveNotes = (maxOctave * 8) - 1;
   sequenceLength = 16;
   allNotesInSeq = totalOctaveNotes * sequenceLength;
   currentInstrument = 0; // ie. acoustic grand piano
-  sequences = { // each sequence array corresponds to a channel
+  sequences = { // each sequence array is a set of notes for an instrument, but is referenced by channel number
     0: [],
     1: [],
     2: [],
     3: []
   }
-
   // each user/instrument is assigned 1 channel out of four
-  // this should be assigned by talking to Firebase
   channel = 0;
 
   tempo = 120;
@@ -168,22 +173,22 @@ Song.prototype.firebaseNew = function () {
 };
 
 Song.prototype.firebaseSetNotes = function () {
-  stepFBRootRef.update({channel: channel, notes: sequences[channel].join()}); //FB needs string
+  stepFBRootRef.child(songname).child(channel).child(currentInstrument).set(sequences[channel].join());
 };
 
 Song.prototype.firebaseGetNotes = function () {
-  stepFBRootRef.on('value', function(snapshot) {
-    var sequence = snapshot.val();
-    sequences[sequence.channel] = sequence.notes.split(',');
+  stepFBRootRef.on('child_changed', function(snapshot) {
+    var channelFB = snapshot.child(songname).child.val, sequence = snapshot.child(songname).child.val;
+    sequences[channelFB] = sequence.split(',');
     for(var i = 0; i < allNotesInSeq; i++) {
-      sequences[sequence.channel][i] = parseInt(sequences[sequence.channel][i]); //FB sends back string
+      sequences[channelFB][i] = parseInt(sequences[channelFB][i]); //FB sends back string, so we parse into int
     };
   });
 };
 
 Song.prototype.initNotes = function () {
   for(var i = 0; i < allNotesInSeq; i++){
-    sequences[channel][i] = -1; // value of -1 means note is off
+    sequences[currentInstrument][i] = -1; // value of -1 means note is off
   }
 };
 
