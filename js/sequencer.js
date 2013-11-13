@@ -181,8 +181,14 @@ function loadSong(songname, songIsNew) {
   initGrid(newSong);
   clearLoginDiv();
   newSong.initNotes();
+  removeListeners();
   newSong.addListeners();
 };
+
+function removeListeners() {
+  $("#controls").off("click");
+  $("#sequence").off("click");
+}
 
 function convertNoteIdToInt(event) {
   var id = parseInt(event.target.id);
