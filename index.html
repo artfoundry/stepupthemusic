@@ -37,15 +37,27 @@
         <label for="username">Username</label>
         <input id="username" type="text" name="username">
         <label for="pw">Password</label>    
-        <input id="pw" type="text" name="password">
+        <input id="pw" type="password" name="password">
         <input type="submit" value="Login">
       </form>
     </div>
   </div>
 
   <br>
-  <div id="songlist">
+  <div id="songlists">
+    <div id="publicListHeader" hidden>
+      <h4>All available songs:</h4>
+      <div id="publicSonglist">
 
+      </div>
+    </div>
+
+    <div id="userListHeader" hidden>
+      <h4>Your songs:</h4>
+      <div id="userSonglist">
+
+      </div>
+    </div>
   </div>
 
   <div id="loadMessage">
