@@ -66,7 +66,6 @@ function updateUIafterLogin() {
 
 function User() {
   this.userLogin = []; // array will contain serialized username and pw
-  this.userSonglist = "";
 };
 
 User.prototype.getUserLogin = function(request) {
@@ -76,20 +75,6 @@ User.prototype.getUserLogin = function(request) {
   else {  // requesting pw
     return this.userLogin[1].value;
   };
-};
-
-User.prototype.updateUserSongList = function() {
-  var userListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + this.userLogin[0].value + '/');
-  userListFBRef.once('value', function(songSnapshot) {
-    if (songSnapshot.hasChild('songs')) {
-      this.userSonglist = songSnapshot.child('songs').val();
-    };
-  });
-};
-
-User.prototype.getUserSongList = function() {
-  this.updateUserSongList();
-  return this.userSonglist;
 };
 
 User.prototype.verifyLogin = function() {
@@ -154,8 +139,7 @@ User.prototype.printSongList = function(listSelector) {
 User.prototype.listUserSongs = function() {
   var userFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + this.userLogin[0].value);
   userFBRef.once('value', function(userSnapshot) {
-    var userSonglist = userSnapshot.child('songs').val();
-    if (userSonglist) {
+    if (userSnapshot.hasChild('songs')) {
       newUser.printSongList("#userSonglist")
     }
     else {
