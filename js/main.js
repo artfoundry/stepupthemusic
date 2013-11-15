@@ -7,13 +7,11 @@ function initSequencer() {
     soundfontUrl: "./soundfont/",
     instruments: ["acoustic_grand_piano", 
                   "acoustic_guitar_nylon", 
-                  "brass_section", 
                   "distortion_guitar", 
                   "electric_bass_finger", 
                   "flute", 
-                  "synth_drum", 
-                  "tenor_sax", 
-                  "trumpet"],
+                  "synth_drum"
+                  ],
     callback: function() {
       newUser = new User;
       newUser.verifyLogin();
@@ -26,19 +24,21 @@ function createNewSong() {
   var newSongName = window.prompt("Please enter a song name:");
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
   publicSongListFBRef.once('value', function(songsSnapshot) {
-    var songList = Object.keys(songsSnapshot.val());
-    var notNew = true;
-    while (notNew) {
-      for (var i = 0; i < songList.length; i++) {
-        if (newSongName === songList[i]) {
-          i = songList.length + 1;
+    if (songsSnapshot.hasChild('songs')) {
+      var songList = Object.keys(songsSnapshot.val());
+      var notNew = true;
+      while (notNew) {
+        for (var i = 0; i < songList.length; i++) {
+          if (newSongName === songList[i]) {
+            i = songList.length + 1;
+          };
         };
-      };
-      if (i === songList.length + 2) {
-        newSongName = window.prompt("That name is already taken. Please enter a different name:");
-      }
-      else {
-        notNew = false;
+        if (i === songList.length + 2) {
+          newSongName = window.prompt("That name is already taken. Please enter a different name:");
+        }
+        else {
+          notNew = false;
+        };
       };
     };
     var songIsNew = true;
@@ -50,8 +50,8 @@ function updateUIafterLogin() {
   $("#login").html("");
   $("#publicListHeader").toggle(); // make headers visible
   $("#userListHeader").toggle();
-  newUser.listAllSongs();
   newUser.listUserSongs();
+  newUser.listAllSongs();
   $("#menubar").html("<button id='createsong'>Create New Song</button>");
   $("#createsong").on("click", function(){
     event.preventDefault();
@@ -64,10 +64,13 @@ function loadSong(songname, songIsNew) {
   if (songIsNew) {
     newSong.firebaseNewSong();
     newUser.listUserSongs();
-  };
-  initGrid(newSong);
-  clearLoginDiv();
+    newUser.listAllSongs();
+    newSong.firebaseSetChannelStatus("init");
+  }
   newSong.initNotes();
+  initGrid(newSong);
+  newSong.loadChannel();
+  clearLoginDiv();
   removeListeners();
   newSong.addListeners();
 };

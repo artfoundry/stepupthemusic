@@ -39,14 +39,15 @@ function clearLoginDiv() {
   $("#login").html("");  
 };
 
-function initGrid(song) {
+function initGrid(songInfo) {
   $("#sequence").html("");
-  $("#loadMessage").html("<h3>" + song.songname + "</h3>");
-  $("#controls").load("views/sequencer.html");
-  for (var row = song.totalOctaveNotes - 1; row >= 0; row--) {
+  $("#loadMessage").html("<h3>" + songInfo.songname + "</h3>");
+  $("#controls").toggle(true);
+  $("#i" + songInfo.currentInstrument).addClass('selected');
+  for (var row = songInfo.totalOctaveNotes - 1; row >= 0; row--) {
     $("#sequence").append("<div id='row" + row + "'>");
-    for (var col = 0; col < song.sequenceLength; col++) {
-      var buttonId = row + (col * song.totalOctaveNotes);
+    for (var col = 0; col < songInfo.sequenceLength; col++) {
+      var buttonId = row + (col * songInfo.totalOctaveNotes);
       $("#sequence").append("<button class='note' id='" + buttonId + "'>" + buttonId + "</button>");
     };
     $("#sequence").append("</div>");
@@ -78,88 +79,144 @@ Song.prototype.firebaseNewSong = function () {
   userSongsFBRef.child(this.songname).set({url: publicSongListFBRef.child(this.songname).toString()});
 };
 
-Song.prototype.firebaseSetSongData = function () {
+Song.prototype.firebaseSetChannelStatus = function (setting) {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
-  var song = this;
-  publicSongListFBRef.once('value', function(songSnapshot) {
-    publicSongListFBRef.child(song.songname).child(song.channel).child(song.currentInstrument).set(song.sequences[song.channel][song.currentInstrument].join());
-  });
+  if (setting === "init") {
+    for (var i = 0; i < 4; i++) {
+      publicSongListFBRef.child(this.songname).child(i).set({free: true});  
+    };
+  }
+  else { // if setting is true/false
+    publicSongListFBRef.child(this.songname).child(this.channel).set({free: setting});  
+  }
 };
 
-function getFBSongData(songSnapshot) {
+Song.prototype.firebaseSetSongData = function (setting) {
+  var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
+  if (setting === "init") {
+    for (var i = 0; i < 4; i++) {
+      publicSongListFBRef.child(this.songname).child(i).child(this.currentInstrument).set(this.sequences[i][this.currentInstrument].join());
+    };
+  }
+  else { // just a single update for when a user makes a note change
+    publicSongListFBRef.child(this.songname).child(this.channel).child(this.currentInstrument).set(this.sequences[i][this.currentInstrument].join());
+  }
+};
+
+Song.prototype.getFBSongData = function(songSnapshot) {
   var channelValueFB = songSnapshot.child('channel').val();
   var instrumentValueFB = songSnapshot.child('channel').child('instrument').val();
   var sequenceFB = songSnapshot.child('channel').child('instrument').child('sequence').val();
   this.sequences[channelValueFB][instrumentValueFB] = sequenceFB.split(',');
-  for(var i = 0; i < allNotesInSeq; i++) {
+  for (var i = 0; i < allNotesInSeq; i++) {
     this.sequences[channelValueFB][instrumentValueFB][i] = parseInt(this.sequences[channelValueFB][instrumentValueFB][i]); //FB sends back string, so we parse into int
   };
 };
 
 Song.prototype.firebaseGetSongData = function () {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
+  var song = this;
   publicSongListFBRef.once('child_added', function(songSnapshot) {
     if (songSnapshot.hasChild('channel')) {
-      getFBSongData(songSnapshot);
+      song.getFBSongData(songSnapshot);
     };
   });
   publicSongListFBRef.once('child_changed', function(songSnapshot) {
     if (songSnapshot.hasChild('channel')) {
-      getFBSongData(songSnapshot);
+      song.getFBSongData(songSnapshot);
     };
   });
 };
 
 Song.prototype.initNotes = function () {
-  this.sequences[this.channel] = {};
-  this.sequences[this.channel][this.currentInstrument] = []
-  for(var i = 0; i < this.allNotesInSeq; i++){
-    this.sequences[this.channel][this.currentInstrument][i] = -1; // value of -1 means note is off
-  }
-  this.firebaseSetSongData();
+  for (var channel = 0; channel < 4; channel++) {
+    this.sequences[channel] = {};
+    this.sequences[channel][this.currentInstrument] = []
+    for (var i = 0; i < this.allNotesInSeq; i++){
+      this.sequences[channel][this.currentInstrument][i] = -1; // value of -1 means note is off
+    };
+  };
+  this.firebaseSetSongData("init");
   this.firebaseGetSongData();
 };
 
 Song.prototype.addListeners = function () {
-  song = this;
+  var songInfo = this;
   $("#controls").click(function(event) {
     if (event.target.id === "play"){
-      if (song.playOn === false) {
+      if (songInfo.playOn === false) {
         $("#play").addClass('selected');
-        song.playOn = true;
+        songInfo.playOn = true;
         playSeq = setInterval(function() {
-          song.firebaseGetSongData();
-          song.playNotes(song.time);
-          song.time === song.allNotesInSeq ? song.time = 0 : song.time += song.totalOctaveNotes; //loop the sequence
-        }, calcDelay(song.tempo)); // sets the tempo for the song as part of setInterval
+          songInfo.firebaseGetSongData();
+          songInfo.playNotes(songInfo.time);
+          songInfo.time === songInfo.allNotesInSeq ? songInfo.time = 0 : songInfo.time += songInfo.totalOctaveNotes; //loop the sequence
+        }, calcDelay(songInfo.tempo)); // sets the tempo for the song as part of setInterval
       }
       else {
         $("#play").removeClass('selected');
-        song.playOn = false;
+        songInfo.playOn = false;
         clearInterval(playSeq);
       };
     }
     else if ($(event.target).hasClass("channel")) {
-      $("#ch" + song.channel).removeClass('selected');
-      song.channel = event.target.id.slice(2); // remove the 'ch' in the id selector
-      $("#ch" + song.channel).addClass('selected')
-      song.initNotes();
+      $("#ch" + songInfo.channel).removeClass('selected');
+      songInfo.changeChannel(event.target.id.slice(2)); // remove the 'ch' in the id selector
+      $("#ch" + songInfo.channel).addClass('selected');
+      songInfo.initNotes();
     }
     else if ($(event.target).hasClass("instrument")) {
-      var tempArr = song.sequences[song.channel][song.currentInstrument];
-      $("#i" + song.currentInstrument).removeClass('selected');
-      song.currentInstrument = event.target.id.slice(1); // remove the 'i' in the id selector
-      song.sequences[song.channel] = {};
-      song.sequences[song.channel][song.currentInstrument] = tempArr;
-      $("#i" + song.currentInstrument).addClass('selected');
+      var tempArr = songInfo.sequences[songInfo.channel][songInfo.currentInstrument];
+      $("#i" + songInfo.currentInstrument).removeClass('selected');
+      songInfo.currentInstrument = event.target.id.slice(1); // remove the 'i' in the id selector
+      songInfo.sequences[songInfo.channel] = {};
+      songInfo.sequences[songInfo.channel][songInfo.currentInstrument] = tempArr;
+      $("#i" + songInfo.currentInstrument).addClass('selected');
     };
   });
   $("#sequence").click(function(event) {
     if ($(event.target).hasClass("note")) {
       noteId = parseInt(event.target.id);
-      song.toggleNote(noteId, event);
-      // return false;
+      songInfo.toggleNote(noteId, event);
     }
+  });
+};
+
+Song.prototype.changeChannel = function(chosenChannel) {
+  var songFBRef = new Firebase("https://stepupthemusic.firebaseio.com/songs/" + this.songname);
+  var songInfo = this;
+  songFBRef.once('value', function(songSnapshot) {
+    var songInfoOnFB = songSnapshot.val();
+    if (chosenChannel === songInfo.channel) {
+      alert("You are already using this track.");
+    }
+    else if (songInfoOnFB[chosenChannel].free === true) {
+      songInfo.firebaseSetChannelStatus(true);  // free up channel being left    
+      songInfo.channel = chosenChannel;
+      songInfo.firebaseSetChannelStatus(false); // new channel is now taken
+    }
+    else {
+      alert("Sorry, but that track is already in use. Try again later.")
+    };
+  });
+};
+
+Song.prototype.loadChannel = function() {
+  var songFBRef = new Firebase("https://stepupthemusic.firebaseio.com/songs/" + this.songname);
+  var songInfo = this;
+  songFBRef.once('value', function(songSnapshot) {
+    var songInfoOnFB = songSnapshot.val();
+    for (var i = 0; i < 4; i++) {
+      if (songInfoOnFB[i].free === true) {
+        songInfo.channel = i;
+        songInfo.firebaseSetChannelStatus(false); //  channel is now taken
+        $("#ch" + songInfo.channel).addClass('selected');
+        i = 5;
+      };
+    };
+    if (i === 4) {
+      alert("Sorry, but there are no available tracks to play right now. Try again later.")
+    };
   });
 };
 
@@ -173,7 +230,7 @@ Song.prototype.toggleNote = function (noteId, event) {
     this.sequences[this.channel][this.currentInstrument][noteId] = -1;
     $("#" + noteId).removeClass('selected');
   };
-  this.firebaseSetSongData();
+  this.firebaseSetSongData("update");
 };
 
 Song.prototype.playNotes = function (time) {

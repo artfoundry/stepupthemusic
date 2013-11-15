@@ -59,14 +59,24 @@ User.prototype.printSongList = function(listSelector) {
     var songListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + this.userLogin[0].value + '/songs/');
   };
   songListFBRef.on('child_added', function(songSnapshot) {
-    var songName = songSnapshot.name();      
-    var songUrl = songListFBRef.toString() + "/" + songName;
-    $(listSelector).append("<a href=" + songUrl + ">" + songName + "</a><br>");
-    $("a").on("click.songlinks", function(event) {
-      event.preventDefault();
-      var songIsNew = false;
-      loadSong($(this).text(), songIsNew);
-    });
+    var songName = songSnapshot.name();
+    // if song is not already listed in the user list, then ok to list in public list
+    if (listSelector === "#publicSonglist") {
+      $(listSelector).append("<button class='publicSong'>" + songName + "</button>");
+      $(".publicSong").on("click", function(event) {
+        event.preventDefault();
+        var songIsNew = false;
+        loadSong($(this).text(), songIsNew);
+      });
+    }
+    else {
+      $(listSelector).append("<button class='userSong'>" + songName + "</button>");
+      $(".userSong").on("click", function(event) {
+        event.preventDefault();
+        var songIsNew = false;
+        loadSong($(this).text(), songIsNew);
+      });
+    };
   });
 };
 
