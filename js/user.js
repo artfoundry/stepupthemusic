@@ -65,14 +65,16 @@ User.prototype.printSongList = function(listSelector) {
       $(listSelector).append("<button class='publicSong'>" + songName + "</button>");
       $(".publicSong").on("click", function(event) {
         event.preventDefault();
+        var clickedSong = $(this).text();
         var songIsNew = false;
-        loadSong($(this).text(), songIsNew);
+        loadSong(clickedSong, songIsNew);
       });
     }
     else {
       $(listSelector).append("<button class='userSong'>" + songName + "</button>");
       $(".userSong").on("click", function(event) {
         event.preventDefault();
+        var clickedSong = $(this).text();
         var songIsNew = false;
         loadSong($(this).text(), songIsNew);
       });

@@ -59,18 +59,42 @@ function updateUIafterLogin() {
   });
 };
 
+function freeChannelExists(songName) {
+  var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/' + songName + '/');
+  var isFree = false;
+  songFBRef.once('value', function(songSnapshot) {
+    var channels = songSnapshot.val();
+    var i = 0;
+    while (i < 4) {
+      if (channels[i].free === true) {
+        isFree = true;
+        i = 4;
+      }
+      else {
+        i++;
+      };
+    };
+  });
+  return isFree;
+};
+
 function loadSong(songname, songIsNew) {
-  var newSong = new Song(songname);
-  if (songIsNew) {
-    newSong.firebaseNewSong();
-    newUser.listUserSongs();
-    newUser.listAllSongs();
-    newSong.firebaseSetChannelStatus("init");
+  if (freeChannelExists(songname)) {
+    var newSong = new Song(songname);
+    if (songIsNew) {
+      newSong.firebaseNewSong();
+      newUser.listUserSongs();
+      newUser.listAllSongs();
+      newSong.firebaseSetChannelStatus("init");
+    }
+    newSong.initNotes();
+    initGrid(newSong);
+    newSong.loadChannel();
+    clearLoginDiv();
+    removeListeners();
+    newSong.addListeners();
   }
-  newSong.initNotes();
-  initGrid(newSong);
-  newSong.loadChannel();
-  clearLoginDiv();
-  removeListeners();
-  newSong.addListeners();
+  else {
+    alert("Sorry, but all tracks are full for this song. Please choose another or create your own!");
+  };
 };

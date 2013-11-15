@@ -211,11 +211,8 @@ Song.prototype.loadChannel = function() {
         songInfo.channel = i;
         songInfo.firebaseSetChannelStatus(false); //  channel is now taken
         $("#ch" + songInfo.channel).addClass('selected');
-        i = 5;
+        i = 4;
       };
-    };
-    if (i === 4) {
-      alert("Sorry, but there are no available tracks to play right now. Try again later.")
     };
   });
 };
