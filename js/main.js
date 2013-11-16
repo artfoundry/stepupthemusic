@@ -89,23 +89,33 @@ function freeChannelExists(songName) {
   return isFree;
 };
 
+function loadCheck(clickedSong) {
+  if (freeChannelExists(clickedSong)) {
+    var songIsNew = false;
+    loadSong(clickedSong, songIsNew);
+  }
+  else {
+    alert("Sorry, but all tracks are full for this song. Please choose another or create your own!");
+  };
+};
+
 function loadSong(songname, songIsNew) {
-  var newSong = new Song(songname);
+  if (newUser.currentSong !== "") {
+    newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
+  }
+  newSong = new Song(songname);
+  newUser.currentSong = songname;
   if (songIsNew) {
     newSong.firebaseNewSong();
     newUser.listUserSongs();
     newUser.listAllSongs();
     newSong.firebaseSetChannelStatus("init", 0);
-  }
-  newSong.initNotes();
-  if (freeChannelExists(songname)) {
-    initGrid(newSong);
-    newSong.loadChannel();
-    clearLoginDiv();
-    removeListeners();
-    newSong.addListeners();
-  }
-  else {
-    alert("Sorry, but all tracks are full for this song. Please choose another or create your own!");
+    newSong.initNotes();
   };
+  newSong.firebaseGetSongData();
+  initGrid(newSong);
+  newSong.loadChannel();
+  clearLoginDiv();
+  removeListeners();
+  newSong.addListeners();
 };

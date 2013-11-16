@@ -98,12 +98,12 @@ Song.prototype.firebaseSetSongData = function (setting) {
       publicSongListFBRef.child(this.songname).child(i).child(this.currentInstrument).set(this.sequences[i][this.currentInstrument].join());
     };
   }
-  else { // just a single update for when a user makes a note change
-    publicSongListFBRef.child(this.songname).child(this.channel).child(this.currentInstrument).set(this.sequences[i][this.currentInstrument].join());
-  }
+  else if (setting === "update") { // just a single update for when a user makes a note change
+    publicSongListFBRef.child(this.songname).child(this.channel).child(this.currentInstrument).set(this.sequences[this.channel][this.currentInstrument].join());
+  };
 };
 
-Song.prototype.getFBSongData = function(songSnapshot) {
+Song.prototype.getFBSongDataWorker = function(songSnapshot) {
   var channelValueFB = songSnapshot.child('channel').val();
   var instrumentValueFB = songSnapshot.child('channel').child('instrument').val();
   var sequenceFB = songSnapshot.child('channel').child('instrument').child('sequence').val();
@@ -118,12 +118,12 @@ Song.prototype.firebaseGetSongData = function () {
   var song = this;
   publicSongListFBRef.once('child_added', function(songSnapshot) {
     if (songSnapshot.hasChild('channel')) {
-      song.getFBSongData(songSnapshot);
+      song.getFBSongDataWorker(songSnapshot);
     };
   });
   publicSongListFBRef.once('child_changed', function(songSnapshot) {
     if (songSnapshot.hasChild('channel')) {
-      song.getFBSongData(songSnapshot);
+      song.getFBSongDataWorker(songSnapshot);
     };
   });
 };
@@ -137,7 +137,6 @@ Song.prototype.initNotes = function () {
     };
   };
   this.firebaseSetSongData("init");
-  this.firebaseGetSongData();
 };
 
 Song.prototype.addListeners = function () {
@@ -160,10 +159,11 @@ Song.prototype.addListeners = function () {
       };
     }
     else if ($(event.target).hasClass("channel")) {
+      songInfo.firebaseSetSongData("update");
       $("#ch" + songInfo.channel).removeClass('selected');
       songInfo.changeChannel(event.target.id.slice(2)); // remove the 'ch' in the id selector
       $("#ch" + songInfo.channel).addClass('selected');
-      songInfo.initNotes();
+      songInfo.firebaseGetSongData();
     }
     else if ($(event.target).hasClass("instrument")) {
       var tempArr = songInfo.sequences[songInfo.channel][songInfo.currentInstrument];

@@ -1,5 +1,6 @@
 function User() {
   this.userLogin = []; // array will contain serialized username and pw
+  this.currentSong = "";
 };
 
 User.prototype.getUserLogin = function(request) {
@@ -78,8 +79,7 @@ User.prototype.printSongList = function(listSelector) {
       $(".publicSong").on("click", function(event) {
         event.preventDefault();
         var clickedSong = $(this).text();
-        var songIsNew = false;
-        loadSong(clickedSong, songIsNew);
+        loadCheck(clickedSong);
       });
     }
     else {
@@ -87,8 +87,7 @@ User.prototype.printSongList = function(listSelector) {
       $(".userSong").on("click", function(event) {
         event.preventDefault();
         var clickedSong = $(this).text();
-        var songIsNew = false;
-        loadSong($(this).text(), songIsNew);
+        loadCheck(clickedSong);
       });
     };
   });
