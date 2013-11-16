@@ -102,15 +102,16 @@ function loadCheck(clickedSong) {
 function loadSong(songname, songIsNew) {
   if (newUser.currentSong !== "") {
     newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
-  }
+  };
   newSong = new Song(songname);
   newUser.currentSong = songname;
+  newSong.initNotes();
   if (songIsNew) {
     newSong.firebaseNewSong();
+    newSong.firebaseSetChannelStatus("init", 0);
+    newSong.firebaseSetSongData("init");
     newUser.listUserSongs();
     newUser.listAllSongs();
-    newSong.firebaseSetChannelStatus("init", 0);
-    newSong.initNotes();
   };
   newSong.firebaseGetSongData();
   initGrid(newSong);

@@ -83,11 +83,11 @@ Song.prototype.firebaseSetChannelStatus = function (setting, channelToSet) {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
   if (setting === "init") {
     for (var i = 0; i < 4; i++) {
-      publicSongListFBRef.child(this.songname).child(i).set({free: true});  
+      publicSongListFBRef.child(this.songname).child(i).update({free: true});  
     };
   }
   else { // if setting is true/false (if false, it will be the username)
-    publicSongListFBRef.child(this.songname).child(channelToSet).set({free: setting});  
+    publicSongListFBRef.child(this.songname).child(channelToSet).update({free: setting});  
   }
 };
 
@@ -104,25 +104,31 @@ Song.prototype.firebaseSetSongData = function (setting) {
 };
 
 Song.prototype.getFBSongDataWorker = function(songSnapshot) {
-  var channelValueFB = songSnapshot.child('channel').val();
-  var instrumentValueFB = songSnapshot.child('channel').child('instrument').val();
-  var sequenceFB = songSnapshot.child('channel').child('instrument').child('sequence').val();
-  this.sequences[channelValueFB][instrumentValueFB] = sequenceFB.split(',');
-  for (var i = 0; i < allNotesInSeq; i++) {
-    this.sequences[channelValueFB][instrumentValueFB][i] = parseInt(this.sequences[channelValueFB][instrumentValueFB][i]); //FB sends back string, so we parse into int
+  for (var i = 0; i < 4; i++) {
+    var instrumentValueFB = songSnapshot.child(i).child(0).name();
+    var sequenceFB = songSnapshot.child(i).child(0).val();
+    this.sequences[i][instrumentValueFB] = sequenceFB.split(',');
+    for (var n = 0; n < this.allNotesInSeq; n++) {
+      this.sequences[i][instrumentValueFB][n] = parseInt(this.sequences[i][instrumentValueFB][n]); //FB sends back string, so we parse into int
+    };
   };
 };
 
 Song.prototype.firebaseGetSongData = function () {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
   var song = this;
+  publicSongListFBRef.once('value', function(songSnapshot) {
+    if (songSnapshot.hasChild(song.songname)) {
+      song.getFBSongDataWorker(songSnapshot.child(song.songname));
+    };
+  });
   publicSongListFBRef.once('child_added', function(songSnapshot) {
-    if (songSnapshot.hasChild('channel')) {
+    if (songSnapshot.hasChildren()) {
       song.getFBSongDataWorker(songSnapshot);
     };
   });
   publicSongListFBRef.once('child_changed', function(songSnapshot) {
-    if (songSnapshot.hasChild('channel')) {
+    if (songSnapshot.hasChildren()) {
       song.getFBSongDataWorker(songSnapshot);
     };
   });
@@ -131,12 +137,11 @@ Song.prototype.firebaseGetSongData = function () {
 Song.prototype.initNotes = function () {
   for (var channel = 0; channel < 4; channel++) {
     this.sequences[channel] = {};
-    this.sequences[channel][this.currentInstrument] = []
+    this.sequences[channel][this.currentInstrument] = [];
     for (var i = 0; i < this.allNotesInSeq; i++){
       this.sequences[channel][this.currentInstrument][i] = -1; // value of -1 means note is off
     };
   };
-  this.firebaseSetSongData("init");
 };
 
 Song.prototype.addListeners = function () {
