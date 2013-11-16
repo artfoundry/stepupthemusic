@@ -11,6 +11,17 @@ User.prototype.getUserLogin = function(request) {
   };
 };
 
+User.prototype.updateConnectStatus = function() {
+  var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + this.userLogin[0].value + '/connections');
+  var connectedRef = new Firebase('https://stepupthemusic.firebaseIO.com/.info/connected');
+  connectedRef.on('value', function(snapshot) {
+    if (snapshot.val() === true) {
+      var connectedDevice = myConnectionsRef.push(true);
+      connectedDevice.onDisconnect().remove();
+    }
+  });
+};
+
 User.prototype.verifyLogin = function() {
   $("#create").click(function(){
     $("#login").load("views/create_user.html");
@@ -25,6 +36,7 @@ User.prototype.verifyLogin = function() {
       var username = snapshot.child(user.userLogin[0].value).name();
       var password = snapshot.child(user.userLogin[0].value).child('pw').val();
       if ((user.userLogin[0].value === username) && (user.userLogin[1].value === password)) {
+        user.updateConnectStatus();
         updateUIafterLogin();
       }
       else {

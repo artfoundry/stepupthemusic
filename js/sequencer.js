@@ -79,15 +79,15 @@ Song.prototype.firebaseNewSong = function () {
   userSongsFBRef.child(this.songname).set({url: publicSongListFBRef.child(this.songname).toString()});
 };
 
-Song.prototype.firebaseSetChannelStatus = function (setting) {
+Song.prototype.firebaseSetChannelStatus = function (setting, channelToSet) {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
   if (setting === "init") {
     for (var i = 0; i < 4; i++) {
       publicSongListFBRef.child(this.songname).child(i).set({free: true});  
     };
   }
-  else { // if setting is true/false
-    publicSongListFBRef.child(this.songname).child(this.channel).set({free: setting});  
+  else { // if setting is true/false (if false, it will be the username)
+    publicSongListFBRef.child(this.songname).child(channelToSet).set({free: setting});  
   }
 };
 
@@ -190,14 +190,23 @@ Song.prototype.changeChannel = function(chosenChannel) {
     if (chosenChannel === songInfo.channel) {
       alert("You are already using this track.");
     }
-    else if (songInfoOnFB[chosenChannel].free === true) {
-      songInfo.firebaseSetChannelStatus(true);  // free up channel being left    
-      songInfo.channel = chosenChannel;
-      songInfo.firebaseSetChannelStatus(false); // new channel is now taken
-    }
     else {
-      alert("Sorry, but that track is already in use. Try again later.")
-    };
+      var channelStatus = songInfoOnFB[chosenChannel].free
+      if (channelStatus !== true) { // if channel is taken, see if user is still connected
+        if (!isConnected(channelStatus)) {
+          songInfo.firebaseSetChannelStatus(true, chosenChannel);
+          channelStatus = songInfoOnFB[chosenChannel].free
+        };
+      }
+      if (channelStatus === true) {
+        songInfo.firebaseSetChannelStatus(true, songInfo.channel);  // free up channel being left    
+        songInfo.channel = chosenChannel;
+        songInfo.firebaseSetChannelStatus(newUser.getUserLogin("name"), songInfo.channel); // new channel is now taken
+      }
+      else {
+        alert("Sorry, but that track is already in use. Try again later.");
+      };
+    }
   });
 };
 
@@ -209,7 +218,7 @@ Song.prototype.loadChannel = function() {
     for (var i = 0; i < 4; i++) {
       if (songInfoOnFB[i].free === true) {
         songInfo.channel = i;
-        songInfo.firebaseSetChannelStatus(false); //  channel is now taken
+        songInfo.firebaseSetChannelStatus(newUser.getUserLogin("name"), songInfo.channel); //  channel is now taken
         $("#ch" + songInfo.channel).addClass('selected');
         i = 4;
       };

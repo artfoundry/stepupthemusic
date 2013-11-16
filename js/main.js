@@ -59,6 +59,17 @@ function updateUIafterLogin() {
   });
 };
 
+function isConnected(username) {
+  var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + username + '/');
+  var connected = true;
+  myConnectionsRef.on('value', function(snapshot) {
+    if ((snapshot.hasChild('connections') !== true) || (snapshot.child('connections').val() === null)) {
+      connected = false;
+    };
+  });
+  return connected;
+};
+
 function freeChannelExists(songName) {
   var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/' + songName + '/');
   var isFree = false;
@@ -79,15 +90,15 @@ function freeChannelExists(songName) {
 };
 
 function loadSong(songname, songIsNew) {
+  var newSong = new Song(songname);
+  if (songIsNew) {
+    newSong.firebaseNewSong();
+    newUser.listUserSongs();
+    newUser.listAllSongs();
+    newSong.firebaseSetChannelStatus("init", 0);
+  }
+  newSong.initNotes();
   if (freeChannelExists(songname)) {
-    var newSong = new Song(songname);
-    if (songIsNew) {
-      newSong.firebaseNewSong();
-      newUser.listUserSongs();
-      newUser.listAllSongs();
-      newSong.firebaseSetChannelStatus("init");
-    }
-    newSong.initNotes();
     initGrid(newSong);
     newSong.loadChannel();
     clearLoginDiv();
