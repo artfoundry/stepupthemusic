@@ -109,7 +109,7 @@ function loadSong(songname, songIsNew) {
   if (songIsNew) {
     newSong.firebaseNewSong();
     newSong.firebaseSetChannelStatus("init", 0);
-    newSong.firebaseSetSongData("init");
+    newSong.firebaseInitSongData();
     newUser.listUserSongs();
     newUser.listAllSongs();
   };
