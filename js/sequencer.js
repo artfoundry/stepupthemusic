@@ -110,6 +110,9 @@ Song.prototype.getFBSongDataWorker = function(songSnapshot) {
   for (var i = 0; i < 4; i++) {
     var instrumentValueFB = Object.keys(songSnapshot.child(i).val())[0];
     var channelDataFB = songSnapshot.child(i).val();
+    // var localInstrument = Object.keys(this.sequences[i])
+    // if (this.sequences[i][localInstrument] === channelDataFB[instrumentValueFB])
+    this.sequences[i] = {};
     this.sequences[i][instrumentValueFB] = channelDataFB[instrumentValueFB].split(',');
     for (var n = 0; n < this.allNotesInSeq; n++) {
       this.sequences[i][instrumentValueFB][n] = parseInt(this.sequences[i][instrumentValueFB][n]); //FB sends back string, so we parse into int
@@ -148,8 +151,10 @@ Song.prototype.initNotes = function () {
 };
 
 Song.prototype.updateGrid = function(lastChannel) {
-  var instrument = Object.keys(this.sequences[lastChannel]);
-  $("#i" + instrument).removeClass('selected');  
+  if (lastChannel !== undefined) {
+    var instrument = Object.keys(this.sequences[lastChannel]);
+    $("#i" + instrument).removeClass('selected');
+  };
   $("#i" + this.currentInstrument).addClass('selected');
   for (var i = 0; i < this.allNotesInSeq; i++) {
     if (this.sequences[this.channel][this.currentInstrument][i] > -1) {
@@ -185,8 +190,7 @@ Song.prototype.addListeners = function() {
       $("#ch" + songInfo.channel).removeClass('selected');
       songInfo.changeChannel(event.target.id.slice(2)); // remove the 'ch' in the id selector
       $("#ch" + songInfo.channel).addClass('selected');
-      var instrument = Object.keys(songInfo.sequences[songInfo.channel])[0];
-      songInfo.currentInstrument = instrument;
+      songInfo.updateInstrument();
       songInfo.updateGrid(lastChannel);
     }
     else if ($(event.target).hasClass("instrument")) {
@@ -207,6 +211,11 @@ Song.prototype.addListeners = function() {
       songInfo.toggleNote(noteId, event);
     }
   });
+};
+
+Song.prototype.updateInstrument = function() {
+  var instrument = Object.keys(this.sequences[this.channel])[0];
+  this.currentInstrument = instrument;
 };
 
 Song.prototype.changeChannel = function(chosenChannel) {
@@ -271,18 +280,17 @@ Song.prototype.playNotes = function (time) {
   var delay = 0; // play one note every quarter second
   var velocity = 127; // how hard the note hits
   var note = 0;
-  var songFBRef = new Firebase("https://stepupthemusic.firebaseio.com/songs/" + this.songname + "/");
-  songFBRef.once('value', function(songSnapshot) {
-    MIDI.setVolume(0, 127);
-    for (var i = 0; i < 4; i++) {
-      MIDI.programChange(i, songSnapshot.child(i).child(0).name()); //channel, program
-    };
-  });
-  for (var i = 0; i < this.totalOctaveNotes; i++) { // set up new channel for each note played at one time
+  var instrument = "0";
+  MIDI.setVolume(0, 127);
+  for (var i = 0; i < 4; i++) {
+    instrument = Object.keys(this.sequences[i]);
+    MIDI.programChange(i, instrument); //channel, program
+  };
+  for (var i = 0; i < this.totalOctaveNotes; i++) { 
     if (this.sequences[this.channel][this.currentInstrument][i + this.time] > -1) { // play if the note is selected/on
       for (var c = 0; c < 4; c++) {
-        var instrument = Object.keys(this.sequences[c]);
-        note = this.sequences[c][instrument][i + this.time]; // the MIDI note
+        instrument = Object.keys(this.sequences[c]);
+        note = this.sequences[c][instrument][i + this.time];
         MIDI.noteOn(c, note, velocity, delay);  // play the note
       };
       var noteId = this.time + i
