@@ -185,7 +185,7 @@ Song.prototype.addListeners = function() {
     else if ($(event.target).hasClass("channel")) {
       var lastChannel = songInfo.channel;
       $("#ch" + songInfo.channel).removeClass('selected');
-      songInfo.changeChannel(event.target.id.slice(2)); // remove the 'ch' in the id selector
+      songInfo.changeChannel(parseInt(event.target.id.slice(2))); // remove the 'ch' in the id selector
       $("#ch" + songInfo.channel).addClass('selected');
       songInfo.updateInstrument();
       songInfo.updateGrid(lastChannel);
