@@ -88,7 +88,7 @@ Song.prototype.firebaseSetChannelStatus = function (setting, channelToSet) {
   }
   else { // if setting is true/false (if false, it will be the username)
     publicSongListFBRef.child(this.songname).child(channelToSet).update({free: setting});  
-  }
+  };
 };
 
 Song.prototype.firebaseInitSongData = function () {
@@ -108,9 +108,9 @@ Song.prototype.firebaseUpdateSongData = function (lastInstrument) {
 
 Song.prototype.getFBSongDataWorker = function(songSnapshot) {
   for (var i = 0; i < 4; i++) {
-    var instrumentValueFB = songSnapshot.child(i).child(0).name();
-    var sequenceFB = songSnapshot.child(i).child(0).val();
-    this.sequences[i][instrumentValueFB] = sequenceFB.split(',');
+    var instrumentValueFB = Object.keys(songSnapshot.child(i).val())[0];
+    var channelDataFB = songSnapshot.child(i).val();
+    this.sequences[i][instrumentValueFB] = channelDataFB[instrumentValueFB].split(',');
     for (var n = 0; n < this.allNotesInSeq; n++) {
       this.sequences[i][instrumentValueFB][n] = parseInt(this.sequences[i][instrumentValueFB][n]); //FB sends back string, so we parse into int
     };
@@ -125,16 +125,16 @@ Song.prototype.firebaseGetSongData = function () {
       song.getFBSongDataWorker(songSnapshot.child(song.songname));
     };
   });
-  publicSongListFBRef.once('child_added', function(songSnapshot) {
-    if (songSnapshot.hasChildren()) {
-      song.getFBSongDataWorker(songSnapshot);
-    };
-  });
-  publicSongListFBRef.once('child_changed', function(songSnapshot) {
-    if (songSnapshot.hasChildren()) {
-      song.getFBSongDataWorker(songSnapshot);
-    };
-  });
+  // publicSongListFBRef.once('child_added', function(songSnapshot) {
+  //   if (songSnapshot.hasChildren()) {
+  //     song.getFBSongDataWorker(songSnapshot);
+  //   };
+  // });
+  // publicSongListFBRef.once('child_changed', function(songSnapshot) {
+  //   if (songSnapshot.hasChildren()) {
+  //     song.getFBSongDataWorker(songSnapshot);
+  //   };
+  // });
 };
 
 Song.prototype.initNotes = function () {
@@ -147,7 +147,21 @@ Song.prototype.initNotes = function () {
   };
 };
 
-Song.prototype.addListeners = function () {
+Song.prototype.updateGrid = function(lastChannel) {
+  var instrument = Object.keys(this.sequences[lastChannel]);
+  $("#i" + instrument).removeClass('selected');  
+  $("#i" + this.currentInstrument).addClass('selected');
+  for (var i = 0; i < this.allNotesInSeq; i++) {
+    if (this.sequences[this.channel][this.currentInstrument][i] > -1) {
+      $("#" + i).addClass('selected');
+    }
+    else {
+      $("#" + i).removeClass('selected');
+    };
+  };
+};
+
+Song.prototype.addListeners = function() {
   var songInfo = this;
   $("#controls").click(function(event) {
     if (event.target.id === "play"){
@@ -167,21 +181,24 @@ Song.prototype.addListeners = function () {
       };
     }
     else if ($(event.target).hasClass("channel")) {
-      // songInfo.firebaseUpdateSongData();
+      var lastChannel = songInfo.channel;
       $("#ch" + songInfo.channel).removeClass('selected');
       songInfo.changeChannel(event.target.id.slice(2)); // remove the 'ch' in the id selector
       $("#ch" + songInfo.channel).addClass('selected');
-      songInfo.firebaseGetSongData();
+      var instrument = Object.keys(songInfo.sequences[songInfo.channel])[0];
+      songInfo.currentInstrument = instrument;
+      songInfo.updateGrid(lastChannel);
     }
     else if ($(event.target).hasClass("instrument")) {
       var tempArr = songInfo.sequences[songInfo.channel][songInfo.currentInstrument];
-      $("#i" + songInfo.currentInstrument).removeClass('selected');
       var lastInstrument = songInfo.currentInstrument;
+      $("#i" + songInfo.currentInstrument).removeClass('selected');
       songInfo.currentInstrument = event.target.id.slice(1); // remove the 'i' in the id selector
       songInfo.sequences[songInfo.channel] = {};
       songInfo.sequences[songInfo.channel][songInfo.currentInstrument] = tempArr;
       $("#i" + songInfo.currentInstrument).addClass('selected');
       songInfo.firebaseUpdateSongData(lastInstrument);
+      songInfo.firebaseGetSongData();
     };
   });
   $("#sequence").click(function(event) {
@@ -238,12 +255,13 @@ Song.prototype.loadChannel = function() {
 
 // currently using notes D3-D5
 Song.prototype.toggleNote = function (noteId, event) {
-  if (this.sequences[this.channel][this.currentInstrument][noteId] === -1) {
-    this.sequences[this.channel][this.currentInstrument][noteId] = convertNoteIdToValue(noteId, this) + 50; // adding 50 converts an ID of 0 to D3
+  var instrument = Object.keys(this.sequences[this.channel])
+  if (this.sequences[this.channel][instrument][noteId] === -1) {
+    this.sequences[this.channel][instrument][noteId] = convertNoteIdToValue(noteId, this) + 50; // adding 50 converts an ID of 0 to D3
     $("#" + noteId).addClass('selected');
   }
   else {
-    this.sequences[this.channel][this.currentInstrument][noteId] = -1;
+    this.sequences[this.channel][instrument][noteId] = -1;
     $("#" + noteId).removeClass('selected');
   };
   this.firebaseUpdateSongData();
@@ -253,19 +271,27 @@ Song.prototype.playNotes = function (time) {
   var delay = 0; // play one note every quarter second
   var velocity = 127; // how hard the note hits
   var note = 0;
-  MIDI.setVolume(0, 127);
-  MIDI.programChange(this.channel, this.currentInstrument); //channel, program
+  var songFBRef = new Firebase("https://stepupthemusic.firebaseio.com/songs/" + this.songname + "/");
+  songFBRef.once('value', function(songSnapshot) {
+    MIDI.setVolume(0, 127);
+    for (var i = 0; i < 4; i++) {
+      MIDI.programChange(i, songSnapshot.child(i).child(0).name()); //channel, program
+    };
+  });
   for (var i = 0; i < this.totalOctaveNotes; i++) { // set up new channel for each note played at one time
     if (this.sequences[this.channel][this.currentInstrument][i + this.time] > -1) { // play if the note is selected/on
-      note = this.sequences[this.channel][this.currentInstrument][i + this.time]; // the MIDI note
+      for (var c = 0; c < 4; c++) {
+        var instrument = Object.keys(this.sequences[c]);
+        note = this.sequences[c][instrument][i + this.time]; // the MIDI note
+        MIDI.noteOn(c, note, velocity, delay);  // play the note
+      };
       var noteId = this.time + i
       $('#' + noteId).removeClass('lightOff');
       $('#' + noteId).addClass('lightOn');
       setTimeout(function(){
         $('#' + noteId).removeClass('lightOn');
-        $('#' + noteId).addClass('lightOff');}, 500);
-      // play the note
-      MIDI.noteOn(this.channel, note, velocity, delay);
-    }
+        $('#' + noteId).addClass('lightOff');
+      }, 500);
+    };
   };
 };
