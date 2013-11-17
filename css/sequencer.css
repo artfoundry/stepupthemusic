@@ -23,3 +23,7 @@
   -moz-transition: background-color .25s ease-in-out;
   -webkit-transition: background-color .25s ease-in-out;
 }
+
+.hidden {
+  display: none;
+}

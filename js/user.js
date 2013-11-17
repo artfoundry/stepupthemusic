@@ -1,5 +1,6 @@
 function User() {
   this.userLogin = []; // array will contain serialized username and pw
+  this.currentSong = "";
 };
 
 User.prototype.getUserLogin = function(request) {
@@ -9,6 +10,17 @@ User.prototype.getUserLogin = function(request) {
   else {  // requesting pw
     return this.userLogin[1].value;
   };
+};
+
+User.prototype.updateConnectStatus = function() {
+  var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + this.userLogin[0].value + '/connections');
+  var connectedRef = new Firebase('https://stepupthemusic.firebaseIO.com/.info/connected');
+  connectedRef.on('value', function(snapshot) {
+    if (snapshot.val() === true) {
+      var connectedDevice = myConnectionsRef.push(true);
+      connectedDevice.onDisconnect().remove();
+    }
+  });
 };
 
 User.prototype.verifyLogin = function() {
@@ -25,6 +37,7 @@ User.prototype.verifyLogin = function() {
       var username = snapshot.child(user.userLogin[0].value).name();
       var password = snapshot.child(user.userLogin[0].value).child('pw').val();
       if ((user.userLogin[0].value === username) && (user.userLogin[1].value === password)) {
+        user.updateConnectStatus();
         updateUIafterLogin();
       }
       else {
@@ -59,14 +72,24 @@ User.prototype.printSongList = function(listSelector) {
     var songListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + this.userLogin[0].value + '/songs/');
   };
   songListFBRef.on('child_added', function(songSnapshot) {
-    var songName = songSnapshot.name();      
-    var songUrl = songListFBRef.toString() + "/" + songName;
-    $(listSelector).append("<a href=" + songUrl + ">" + songName + "</a><br>");
-    $("a").on("click.songlinks", function(event) {
-      event.preventDefault();
-      var songIsNew = false;
-      loadSong($(this).text(), songIsNew);
-    });
+    var songName = songSnapshot.name();
+    // if song is not already listed in the user list, then ok to list in public list
+    if (listSelector === "#publicSonglist") {
+      $(listSelector).append("<button class='publicSong'>" + songName + "</button>");
+      $(".publicSong").on("click", function(event) {
+        event.preventDefault();
+        var clickedSong = $(this).text();
+        loadCheck(clickedSong);
+      });
+    }
+    else {
+      $(listSelector).append("<button class='userSong'>" + songName + "</button>");
+      $(".userSong").on("click", function(event) {
+        event.preventDefault();
+        var clickedSong = $(this).text();
+        loadCheck(clickedSong);
+      });
+    };
   });
 };
 

@@ -47,14 +47,14 @@
 
   <br>
   <div id="songlists">
-    <div id="publicListHeader" hidden>
+    <div id="publicListHeader" class="hidden">
       <h4>All available songs:</h4>
       <div id="publicSonglist">
 
       </div>
     </div>
 
-    <div id="userListHeader" hidden>
+    <div id="userListHeader" class="hidden">
       <h4>Your songs:</h4>
       <div id="userSonglist">
 
@@ -66,8 +66,22 @@
     <h3>Loading sequencer (this could take up to 10 seconds)...</h3>
   </div>
 
-  <div id="controls">
-
+  <div id="controls" class="hidden">
+    <button id="play">Play</button><br>
+    Instruments:
+    <button class="instrument" id="i0">Acoustic Grand Piano</button>
+    <button class="instrument" id="i24">Acoustic Nylon Guitar</button>
+    <button class="instrument" id="i30">Distortion Guitar</button>
+    <button class="instrument" id="i33">Electric Bass, Fingered</button>
+    <button class="instrument" id="i73">Flute</button>
+    <button class="instrument" id="i118">Synth Drum</button>
+    <br>
+    Tracks:
+    <button class="channel" id="ch0">1</button>
+    <button class="channel" id="ch1">2</button>
+    <button class="channel" id="ch2">3</button>
+    <button class="channel" id="ch3">4</button>
+    <br>
   </div>
   
   <div id="sequence">
