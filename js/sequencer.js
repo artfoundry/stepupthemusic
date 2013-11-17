@@ -57,7 +57,6 @@ function initGrid(songInfo) {
 
 function Song(songnameArg) {
   this.songname = songnameArg;
-  // var url = "";
   var maxOctave = 2;
   this.totalOctaveNotes = (maxOctave * 8) - 1;
   this.sequenceLength = 16;
@@ -110,8 +109,6 @@ Song.prototype.getFBSongDataWorker = function(songSnapshot) {
   for (var i = 0; i < 4; i++) {
     var instrumentValueFB = Object.keys(songSnapshot.child(i).val())[0];
     var channelDataFB = songSnapshot.child(i).val();
-    // var localInstrument = Object.keys(this.sequences[i])
-    // if (this.sequences[i][localInstrument] === channelDataFB[instrumentValueFB])
     this.sequences[i] = {};
     this.sequences[i][instrumentValueFB] = channelDataFB[instrumentValueFB].split(',');
     for (var n = 0; n < this.allNotesInSeq; n++) {
