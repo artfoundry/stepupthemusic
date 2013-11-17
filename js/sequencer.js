@@ -185,7 +185,7 @@ Song.prototype.addListeners = function() {
     else if ($(event.target).hasClass("channel")) {
       var lastChannel = songInfo.channel;
       $("#ch" + songInfo.channel).removeClass('selected');
-      songInfo.changeChannel(event.target.id.slice(2)); // remove the 'ch' in the id selector
+      songInfo.changeChannel(parseInt(event.target.id.slice(2))); // remove the 'ch' in the id selector
       $("#ch" + songInfo.channel).addClass('selected');
       songInfo.updateInstrument();
       songInfo.updateGrid(lastChannel);
@@ -260,7 +260,7 @@ Song.prototype.loadChannel = function() {
 };
 
 // currently using notes D3-D5
-Song.prototype.toggleNote = function (noteId, event) {
+Song.prototype.toggleNote = function(noteId, event) {
   var instrument = Object.keys(this.sequences[this.channel])
   if (this.sequences[this.channel][instrument][noteId] === -1) {
     this.sequences[this.channel][instrument][noteId] = convertNoteIdToValue(noteId, this) + 50; // adding 50 converts an ID of 0 to D3
@@ -273,7 +273,17 @@ Song.prototype.toggleNote = function (noteId, event) {
   this.firebaseUpdateSongData();
 };
 
-Song.prototype.playNotes = function (time) {
+Song.prototype.highlightNote = function(pitch) {
+  var noteId = this.time + pitch
+  $('#' + noteId).removeClass('lightOff');
+  $('#' + noteId).addClass('lightOn');
+  setTimeout(function(){
+    $('#' + noteId).removeClass('lightOn');
+    $('#' + noteId).addClass('lightOff');
+  }, 500);
+};
+
+Song.prototype.playNotes = function(time) {
   var delay = 0; // play one note every quarter second
   var velocity = 127; // how hard the note hits
   var note = 0;
@@ -284,19 +294,15 @@ Song.prototype.playNotes = function (time) {
     MIDI.programChange(i, instrument); //channel, program
   };
   for (var i = 0; i < this.totalOctaveNotes; i++) { 
-    if (this.sequences[this.channel][this.currentInstrument][i + this.time] > -1) { // play if the note is selected/on
-      for (var c = 0; c < 4; c++) {
-        instrument = Object.keys(this.sequences[c]);
+    for (var c = 0; c < 4; c++) {
+      instrument = Object.keys(this.sequences[c]);
+      if (this.sequences[c][instrument][i + this.time] > -1) { // play if the note is selected/on
         note = this.sequences[c][instrument][i + this.time];
         MIDI.noteOn(c, note, velocity, delay);  // play the note
+        if (c === this.channel) {
+          this.highlightNote(i);
+        };
       };
-      var noteId = this.time + i
-      $('#' + noteId).removeClass('lightOff');
-      $('#' + noteId).addClass('lightOn');
-      setTimeout(function(){
-        $('#' + noteId).removeClass('lightOn');
-        $('#' + noteId).addClass('lightOff');
-      }, 500);
     };
   };
 };
