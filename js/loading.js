@@ -48,11 +48,13 @@ function createNewSong() {
 
 function updateUIafterLogin() {
   $("#login").html("");
+  $("#create").remove();
+  $("#username").html("Welcome " + newUser.userLogin[0].value)
+  $("#menubar").append("<button id='createsong'>Create New Song</button>");
   $("#publicListHeader").toggle(); // make headers visible
   $("#userListHeader").toggle();
   newUser.listUserSongs();
   newUser.listAllSongs();
-  $("#menubar").html("<button id='createsong'>Create New Song</button>");
   $("#createsong").on("click", function(){
     event.preventDefault();
     createNewSong();

@@ -42,6 +42,7 @@ function clearLoginDiv() {
 function initGrid(songInfo) {
   $("#sequence").html("");
   $("#loadMessage").html("<h3>" + songInfo.songname + "</h3>");
+  $("#musicians").toggle(true);
   $("#controls").toggle(true);
   $("#i" + songInfo.currentInstrument).addClass('selected');
   for (var row = songInfo.totalOctaveNotes - 1; row >= 0; row--) {
@@ -120,7 +121,7 @@ Song.prototype.getFBSongDataWorker = function(songSnapshot) {
 Song.prototype.firebaseGetSongData = function () {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
   var song = this;
-  publicSongListFBRef.once('value', function(songSnapshot) {
+  publicSongListFBRef.on('value', function(songSnapshot) {
     if (songSnapshot.hasChild(song.songname)) {
       song.getFBSongDataWorker(songSnapshot.child(song.songname));
     };
@@ -152,6 +153,13 @@ Song.prototype.updateGrid = function(lastChannel) {
     var instrument = Object.keys(this.sequences[lastChannel]);
     $("#i" + instrument).removeClass('selected');
   };
+  var songFBRef = new Firebase("https://stepupthemusic.firebaseIO.com/songs/" + this.songname)
+  songFBRef.on("value", function(songSnapshot) {
+    for (var i = 0; i < 4; i++) {
+      var username = songSnapshot.child(i).child("free").val()
+      username !== true ? $("#user" + (i + 1)).html(username) : $("#user" + (i + 1)).html("Empty");
+    };
+  });
   $("#i" + this.currentInstrument).addClass('selected');
   for (var i = 0; i < this.allNotesInSeq; i++) {
     if (this.sequences[this.channel][this.currentInstrument][i] > -1) {

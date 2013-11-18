@@ -24,6 +24,8 @@
   <script src="./inc/Base64.js" type="text/javascript"></script>
   <script src="./inc/base64binary.js" type="text/javascript"></script>
   <!-- Gumby js -->
+  <script src="./js/libs/gumby.js" type="text/javascript"></script>
+  <script src="./js/libs/gumby.init.js" type="text/javascript"></script>  
   <script src="./js/main.js" type="text/javascript"></script>
   <script src="./js/plugins.js" type="text/javascript"></script>
   <!-- sequencer.js -->     
@@ -33,19 +35,21 @@
 
 </head>
 <body>
-
+  <h3>Step Up The Music!</h3>
   <div id="menubar">
-    <button id="create">Create new user</button><br>
+    <span id="username"></span>
+    <button id="create">Create new user</button>
+    <br>
   </div> <!-- menubar -->
 
   <div id="login">
     <div>
       Login:
       <form id="login" action="">
-        <label for="username">Username</label>
-        <input id="username" type="text" name="username">
-        <label for="pw">Password</label>    
-        <input id="pw" type="password" name="password">
+        <input id="username" type="text" name="username" placeholder=
+        "Username">
+        <input id="pw" type="password" name="password" placeholder=
+        "Password">
         <input type="submit" value="Login">
       </form>
     </div>
@@ -88,6 +92,14 @@
     <button class="channel" id="ch2">3</button>
     <button class="channel" id="ch3">4</button>
     <br>
+  </div>
+
+  <div id="musicians" class="hidden">
+    <h4>Musicians:</h4>
+    Track 1: <span id="user1"></span><br>
+    Track 2: <span id="user2"></span><br>
+    Track 3: <span id="user3"></span><br>
+    Track 4: <span id="user4"></span>
   </div>
   
   <div id="sequence">
