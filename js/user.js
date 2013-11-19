@@ -19,6 +19,10 @@ User.prototype.updateConnectStatus = function() {
     if (snapshot.val() === true) {
       var connectedDevice = myConnectionsRef.push(true);
       connectedDevice.onDisconnect().remove();
+      // var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
+      // if ((myConnectionsRef === null) && (newSong !== undefined)) {
+      //   songFBRef.child(newSong.songname).child(i).update({free: true}); // set channel to available
+      // };
     };
   });
 };

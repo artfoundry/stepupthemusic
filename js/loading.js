@@ -58,7 +58,7 @@ function updateUIafterLogin() {
 };
 
 function isConnected(username) {
-  var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + username + '/');
+  var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + username + '/');
   var connected = true;
   myConnectionsRef.on('value', function(snapshot) {
     if ((snapshot.hasChild('connections') !== true) || (snapshot.child('connections').val() === null)) {
@@ -75,13 +75,17 @@ function freeChannelExists(songName) {
     var channels = songSnapshot.val();
     var i = 0;
     while (i < 4) {
-      if (channels[i].free === true) {
+      var channelStatus = channels[i].free;
+      if (channelStatus === true) {
         isFree = true;
-        i = 4;
       }
-      else {
-        i++;
+      else if (channelStatus === newUser.userLogin[0].value) {
+        var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + channelStatus + '/connections');
+        if (myConnectionsRef !== null) { // if user listed as occuping the channel isn't connected
+          songFBRef.child(i).update({free: true}); // set channel to available
+        };
       };
+      i++;
     };
   });
   return isFree;
