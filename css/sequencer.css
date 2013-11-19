@@ -1,33 +1,96 @@
 body {
-  background-color: #2F41A7;
+  background-color: #3e74be;
+  background-image: url("../images/background.jpg");
+  line-height: 1.6;
+  font-size: 100%;
+  margin: 0 0 0 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .note {
   width: 40px;
-  height: 25px;
-  margin: 5px;
-  border-radius: 4px;
-  border-style: solid;
+  height: 40px;
+  margin: 1px;
+  padding: 0;
   background-color: transparent;
 }
 
+.marker {
+  width: 15px;
+  height: 25px;  
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
 .selected {
+  border-width: 1px;
+  border-radius: 10px;
   border-style: solid;
-  border-width: 4px;
-  border-color: green;
+  border-color: #b46b33;
 }
 
 .lightOn {
-  background-color: yellow;
+  background-color: #b46b33;
 }
 
 .lightOff {
   background-color: transparent;
-    transition: background-color .25s ease-in-out;
+  transition: background-color .25s ease-in-out;
   -moz-transition: background-color .25s ease-in-out;
   -webkit-transition: background-color .25s ease-in-out;
 }
 
 .hidden {
   display: none;
+}
+
+/*div {
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
+}*/
+
+#play {
+  width: 100px;
+  text-align: center;
+}
+
+.channel {
+  width: 35px;
+}
+
+.instr {
+  width: 150px;
+}
+
+.instrument {
+  font-size: 50%;
+}
+
+#login {
+  margin: 10%;
+}
+
+.rotate {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+
+  /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+
+  /* Should be unset in IE9+ I think. */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+#title {
+  margin-top: 2em;
 }

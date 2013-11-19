@@ -75,7 +75,7 @@ User.prototype.printSongList = function(listSelector) {
     var songName = songSnapshot.name();
     // if song is not already listed in the user list, then ok to list in public list
     if (listSelector === "#publicSonglist") {
-      $(listSelector).append("<button class='publicSong'>" + songName + "</button>");
+      $(listSelector).append("<li class='publicSong'><a href='#'>" + songName + "</a></li>");
       $(".publicSong").on("click", function(event) {
         event.preventDefault();
         var clickedSong = $(this).text();
@@ -83,7 +83,7 @@ User.prototype.printSongList = function(listSelector) {
       });
     }
     else {
-      $(listSelector).append("<button class='userSong'>" + songName + "</button>");
+      $(listSelector).append("<li class='userSong'><a href='#'>" + songName + "</a></li>");
       $(".userSong").on("click", function(event) {
         event.preventDefault();
         var clickedSong = $(this).text();

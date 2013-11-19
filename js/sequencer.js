@@ -41,7 +41,7 @@ function clearLoginDiv() {
 
 function initGrid(songInfo) {
   $("#sequence").html("");
-  $("#loadMessage").html("<h3>" + songInfo.songname + "</h3>");
+  $("#title").html("<h3 class='rotate'>" + songInfo.songname + "</h3>");
   $("#musicians").toggle(true);
   $("#controls").toggle(true);
   $("#i" + songInfo.currentInstrument).addClass('selected');
@@ -49,7 +49,7 @@ function initGrid(songInfo) {
     $("#sequence").append("<div id='row" + row + "'>");
     for (var col = 0; col < songInfo.sequenceLength; col++) {
       var buttonId = row + (col * songInfo.totalOctaveNotes);
-      $("#sequence").append("<button class='note' id='" + buttonId + "'>" + buttonId + "</button>");
+      $("#sequence").append("<a href='#'><img class='note' id='" + buttonId + "' src='images/button_note.png' gumby-retina></a>");
     };
     $("#sequence").append("</div>");
   };
@@ -100,10 +100,10 @@ Song.prototype.firebaseInitSongData = function () {
 
 Song.prototype.firebaseUpdateSongData = function (lastInstrument) {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
+  publicSongListFBRef.child(this.songname).child(this.channel).child(this.currentInstrument).set(this.sequences[this.channel][this.currentInstrument].join());
   if (lastInstrument !== undefined) {
     publicSongListFBRef.child(this.songname).child(this.channel).child(lastInstrument).remove();
   };
-  publicSongListFBRef.child(this.songname).child(this.channel).child(this.currentInstrument).set(this.sequences[this.channel][this.currentInstrument].join());
 };
 
 Song.prototype.getFBSongDataWorker = function(songSnapshot) {
@@ -181,7 +181,12 @@ Song.prototype.addListeners = function() {
         playSeq = setInterval(function() {
           songInfo.firebaseGetSongData();
           songInfo.playNotes(songInfo.time);
-          songInfo.time === songInfo.allNotesInSeq ? songInfo.time = 0 : songInfo.time += songInfo.totalOctaveNotes; //loop the sequence
+          if (songInfo.time === (songInfo.allNotesInSeq - songInfo.totalOctaveNotes)){
+            songInfo.time = 0;  //loop the sequence
+          }
+          else {
+            songInfo.time += songInfo.totalOctaveNotes;
+          };
         }, calcDelay(songInfo.tempo)); // sets the tempo for the song as part of setInterval
       }
       else {
@@ -281,13 +286,10 @@ Song.prototype.toggleNote = function(noteId, event) {
   this.firebaseUpdateSongData();
 };
 
-Song.prototype.highlightNote = function(pitch) {
-  var noteId = this.time + pitch
-  $('#' + noteId).removeClass('lightOff');
-  $('#' + noteId).addClass('lightOn');
+Song.prototype.highlight = function(selectorId) {
+  $('#' + selectorId).attr("src","images/button_note_on.png");
   setTimeout(function(){
-    $('#' + noteId).removeClass('lightOn');
-    $('#' + noteId).addClass('lightOff');
+  $('#' + selectorId).attr("src","images/button_note.png");
   }, 500);
 };
 
@@ -301,6 +303,8 @@ Song.prototype.playNotes = function(time) {
     instrument = Object.keys(this.sequences[i]);
     MIDI.programChange(i, instrument); //channel, program
   };
+  var markerId = (this.time / this.totalOctaveNotes).toString();
+  this.highlight("m" + markerId);
   for (var i = 0; i < this.totalOctaveNotes; i++) { 
     for (var c = 0; c < 4; c++) {
       instrument = Object.keys(this.sequences[c]);
@@ -308,7 +312,8 @@ Song.prototype.playNotes = function(time) {
         note = this.sequences[c][instrument][i + this.time];
         MIDI.noteOn(c, note, velocity, delay);  // play the note
         if (c === this.channel) {
-          this.highlightNote(i);
+          var noteId = this.time + i
+          this.highlight(noteId);
         };
       };
     };

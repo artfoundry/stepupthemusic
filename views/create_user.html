@@ -1,10 +1,16 @@
 <div>
-  Create Username:
   <form id="createuser" action="">
-    <label for="username">Username</label>
-    <input id="username" type="text" name="username">
-    <label for="pw">Password</label>    
-    <input id="pw" type="password" name="password">
-    <input id="submituser" type="submit" value="Create">
+    <ul>
+      <div class="row">
+        <div class="centered eight columns">      
+          <li class="prepend append field">
+            <input class="narrow text input" id="username" type="text" name="username" placeholder="Username" />
+            <input class="narrow text input" id="pw" type="password" name="password" placeholder="Password" />
+            <div class="medium primary btn"><input type="submit" value="Create" id="submituser" /></div>
+          </li>
+        </div>
+      </div>
+    </ul>
   </form>
 </div>
+

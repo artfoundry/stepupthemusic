@@ -15,7 +15,7 @@ function initSequencer() {
     callback: function() {
       newUser = new User;
       newUser.verifyLogin();
-      $("#loadMessage").text("Loading finished.");
+      $("#loadMessage").text("");
     }
   });
 };
@@ -47,12 +47,8 @@ function createNewSong() {
 };
 
 function updateUIafterLogin() {
-  $("#login").html("");
-  $("#create").remove();
-  $("#username").html("Welcome " + newUser.userLogin[0].value)
-  $("#menubar").append("<button id='createsong'>Create New Song</button>");
-  $("#publicListHeader").toggle(); // make headers visible
-  $("#userListHeader").toggle();
+  $("#login").toggle();
+  $("#navbar").toggle(); // make navbar visible
   newUser.listUserSongs();
   newUser.listAllSongs();
   $("#createsong").on("click", function(){
