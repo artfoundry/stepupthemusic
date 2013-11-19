@@ -19,7 +19,7 @@ User.prototype.updateConnectStatus = function() {
     if (snapshot.val() === true) {
       var connectedDevice = myConnectionsRef.push(true);
       connectedDevice.onDisconnect().remove();
-    }
+    };
   });
 };
 
