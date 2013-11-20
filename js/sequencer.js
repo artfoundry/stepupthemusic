@@ -49,7 +49,13 @@ function initGrid(songInfo) {
     $("#sequence").append("<div id='row" + row + "'>");
     for (var col = 0; col < songInfo.sequenceLength; col++) {
       var buttonId = row + (col * songInfo.totalOctaveNotes);
-      $("#sequence").append("<a href='#'><img class='note' id='" + buttonId + "' src='images/button_note.png' gumby-retina></a>");
+      if (songInfo.sequences[songInfo.channel][songInfo.currentInstrument][buttonId] > -1) {
+        image = "images/button_note_pressed.png";
+      }
+      else {
+        image = "images/button_note.png";
+      }
+      $("#sequence").append("<a href='#'><img class='note' id='" + buttonId + "' src='" + image + "' gumby-retina></a>");
     };
     $("#sequence").append("</div>");
   };
@@ -155,18 +161,19 @@ Song.prototype.updateGrid = function(lastChannel) {
   };
   var songFBRef = new Firebase("https://stepupthemusic.firebaseIO.com/songs/" + this.songname)
   songFBRef.on("value", function(songSnapshot) {
+    var username = "";
     for (var i = 0; i < 4; i++) {
-      var username = songSnapshot.child(i).child("free").val()
+      username = songSnapshot.child(i).child("free").val()
       username !== true ? $("#user" + (i + 1)).html(username) : $("#user" + (i + 1)).html("Empty");
     };
   });
   $("#i" + this.currentInstrument).addClass('selected');
   for (var i = 0; i < this.allNotesInSeq; i++) {
     if (this.sequences[this.channel][this.currentInstrument][i] > -1) {
-      $("#" + i).addClass('selected');
+      $("#" + i).attr("src","images/button_note_pressed.png");
     }
     else {
-      $("#" + i).removeClass('selected');
+      $("#" + i).attr("src","images/button_note.png");
     };
   };
 };
@@ -277,11 +284,11 @@ Song.prototype.toggleNote = function(noteId, event) {
   var instrument = Object.keys(this.sequences[this.channel])
   if (this.sequences[this.channel][instrument][noteId] === -1) {
     this.sequences[this.channel][instrument][noteId] = convertNoteIdToValue(noteId, this) + 50; // adding 50 converts an ID of 0 to D3
-    $("#" + noteId).addClass('selected');
+    $("#" + noteId).attr("src","images/button_note_pressed.png");
   }
   else {
     this.sequences[this.channel][instrument][noteId] = -1;
-    $("#" + noteId).removeClass('selected');
+    $("#" + noteId).attr("src","images/button_note.png");
   };
   this.firebaseUpdateSongData();
 };
@@ -289,7 +296,7 @@ Song.prototype.toggleNote = function(noteId, event) {
 Song.prototype.highlight = function(selectorId) {
   $('#' + selectorId).attr("src","images/button_note_on.png");
   setTimeout(function(){
-  $('#' + selectorId).attr("src","images/button_note.png");
+  $('#' + selectorId).attr("src","images/button_note_pressed.png");
   }, 500);
 };
 
