@@ -74,14 +74,27 @@ function freeChannelExists(songName) {
   songFBRef.once('value', function(songSnapshot) {
     var channels = songSnapshot.val();
     var i = 0;
+    var channelStatus = "";
+    var myConnectionsRef = {};
     while (i < 4) {
-      if (channels[i].free === true) {
+      channelStatus = channels[i].free;
+      myConnectionsRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + channelStatus + '/connections');
+      if (channelStatus === true) {
         isFree = true;
-        i = 4;
       }
-      else {
-        i++;
+      else if (channelStatus === newUser.userLogin[0].value) { // if user listed as occuping the channel...
+        if (myConnectionsRef !== null) { // ...is connected and trying to get into the song...
+          songFBRef.child(i).update({free: true}); // ...set channel to available
+          isFree = true;
+        };
+      }
+      else if (channelStatus !== newUser.userLogin[0].value) { // if user is not the current user
+        if (myConnectionsRef === null) { // ...and is not connected
+          songFBRef.child(i).update({free: true}); // ...set channel to available
+          isFree = true;
+        };
       };
+      i++;
     };
   });
   return isFree;
