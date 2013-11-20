@@ -29,11 +29,15 @@ body {
 }
 
 .marker {
-  width: 15px;
-  height: 25px;  
-  margin: 0;
+  width: 20px;
+  height: 40px;  
+  margin-left: .6em;
   padding: 0;
-  text-align: center;
+}
+
+.markerimg {
+  width: 100%;
+  height: 70%;
 }
 
 .selected {
