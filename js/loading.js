@@ -58,7 +58,7 @@ function updateUIafterLogin() {
 };
 
 function isConnected(username) {
-  var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + username + '/');
+  var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + username + '/');
   var connected = true;
   myConnectionsRef.on('value', function(snapshot) {
     if ((snapshot.hasChild('connections') !== true) || (snapshot.child('connections').val() === null)) {
