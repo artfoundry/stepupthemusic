@@ -14,6 +14,7 @@ function initSequencer() {
                   ],
     callback: function() {
       newUser = new User;
+      $("#login").toggle();
       newUser.verifyLogin();
       $("#loadMessage").text("");
     }
