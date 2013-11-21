@@ -20,6 +20,7 @@
   <script src="js/MIDI/LoadPlugin.js" type="text/javascript"></script>
   <script src="js/MIDI/Plugin.js" type="text/javascript"></script>
   <script src="js/MIDI/Player.js" type="text/javascript"></script>
+  <script src="./js/Window/Event.js" type="text/javascript"></script>
   <script src="js/Window/DOMLoader.XMLHttp.js" type="text/javascript"></script>
   <script src="js/Window/DOMLoader.script.js" type="text/javascript"></script>
   <!-- extras -->
@@ -32,23 +33,29 @@
   <script src="js/libs/ui/gumby.toggleswitch.js"></script>
   <script src="js/libs/ui/gumby.navbar.js"></script>
   <script src="js/libs/gumby.init.js"></script>
-  <!--
+  
   <script src="./js/main.js" type="text/javascript"></script>
   <script src="./js/plugins.js" type="text/javascript"></script>
--->
+
   <!-- sequencer.js -->     
   <script src="js/loading.js" type="text/javascript"></script>
   <script src="js/user.js" type="text/javascript"></script>
   <script src="js/sequencer.js" type="text/javascript"></script>
 
+  <script src="js/canvas.js" type="text/javascript"></script>
+
+
 </head>
 <body>
+<canvas id="canvasSection">Error, canvas is not supported</canvas>
 
-  <div id="login">
+  <div id="login" class="hidden">
+    <h2>Step Up The Music</h2>
+    <h5>Please create an account/login so you can save your songs</h5>
     <form action="">
       <ul>
         <div class="row">
-          <div class="centered eight columns">      
+          <div class="centered ten columns">      
             <li class="prepend append field">
               <input class="narrow text input" id="username" type="text" name="username" placeholder="Username" />
               <input class="narrow text input" id="pw" type="password" name="password" placeholder="Password" />
@@ -57,9 +64,9 @@
           </div>
         </div>
         <div class="row">
-          <div class="centered six columns">
+          <div class="centered eight columns">
             <li class="field">
-              <div class="wide medium secondary pretty btn"><input value="Create New User" id="create" style="text-align: center;" /></div>
+              <div class="wide medium secondary pretty btn"><input value="Create New Account" id="create" style="text-align: center;" /></div>
             </li>
           </div>
         </div>
@@ -68,26 +75,24 @@
   </div>
 
   <div id="loadMessage" style="text-align: center;">
-    <h3>Loading sequencer (this could take up to 10 seconds)...</h3>
+    <h3>Loading (this could take up to 10 seconds)...</h3>
   </div>  
 
   <!-- Navbar -->
   <div id="navbar" class="hidden">
-    <div class="row navbar trans" id="nav1">
+    <div class="row navbar navstyle" id="nav1">
       <!-- Toggle for mobile navigation, targeting the <ul> -->
       <a class="toggle" gumby-trigger="#nav1 > ul" href="#"><i class="icon-menu"></i></a>
       <h5 class="four columns logo">
-        <a href="#">
-          Step Up The Music!
+        Step Up The Music
           <!-- <img src="images/" gumby-retina /> -->
-        </a>
       </h5>
       <ul class="six columns">
         <li><a href="#" id="createsong">Create New Song</a></li>
         <li>
           <a href="#">Your Songs</a>
           <div class="dropdown">
-            <ul class="trans" id="userSonglist">
+            <ul id="userSonglist">
 
             </ul>
           </div>
@@ -95,7 +100,7 @@
         <li>
           <a href="#">All Songs</a>
           <div class="dropdown">
-            <ul class="trans" id="publicSonglist">
+            <ul id="publicSonglist">
 
             </ul>
           </div>
@@ -114,29 +119,29 @@
       </div>      
       <div class="twelve columns">  
         <div class="row">
-          <div class="one columns"><div class="marker" id="m0"><img id="m0" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m1"><img id="m1" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m2"><img id="m2" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m3"><img id="m3" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m4"><img id="m4" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m5"><img id="m5" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m6"><img id="m6" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m7"><img id="m7" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m8"><img id="m8" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m9"><img id="m9" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m10"><img id="m10" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m11"><img id="m11" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m12"><img id="m12" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m13"><img id="m13" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m14"><img id="m14" src="images/button_note.png"></div></div>
-          <div class="one columns"><div class="marker" id="m15"><img id="m15" src="images/button_note.png"></div></div>
+          <div class="sixteen columns">
+            <div class="one columns"><div class="marker" id="m0"><img class="markerimg" id="m0" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m1"><img class="markerimg" id="m1" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m2"><img class="markerimg" id="m2" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m3"><img class="markerimg" id="m3" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m4"><img class="markerimg" id="m4" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m5"><img class="markerimg" id="m5" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m6"><img class="markerimg" id="m6" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m7"><img class="markerimg" id="m7" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m8"><img class="markerimg" id="m8" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m9"><img class="markerimg" id="m9" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m10"><img class="markerimg" id="m10" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m11"><img class="markerimg" id="m11" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m12"><img class="markerimg" id="m12" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m13"><img class="markerimg" id="m13" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m14"><img class="markerimg" id="m14" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker" id="m15"><img class="markerimg" id="m15" src="images/button_note.png"></div></div>
+          </div> <!-- end sixteen columns -->
         </div> <!-- end row -->
-        <div class="row">
-          <div id="sequence">
+        <div id="sequence">
 
-          </div>
         </div>
-      </div> <!-- end columns -->
+      </div> <!-- end twelve columns -->
 
       <div class="three columns">
         <ul>

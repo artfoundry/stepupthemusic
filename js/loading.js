@@ -14,6 +14,7 @@ function initSequencer() {
                   ],
     callback: function() {
       newUser = new User;
+      $("#login").toggle();
       newUser.verifyLogin();
       $("#loadMessage").text("");
     }
@@ -55,6 +56,7 @@ function updateUIafterLogin() {
     event.preventDefault();
     createNewSong();
   });
+  ColorSphereBackground();
 };
 
 function isConnected(username) {

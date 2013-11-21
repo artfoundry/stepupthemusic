@@ -45,8 +45,10 @@ function initGrid(songInfo) {
   $("#musicians").toggle(true);
   $("#controls").toggle(true);
   $("#i" + songInfo.currentInstrument).addClass('selected');
+  var grid = "";
   for (var row = songInfo.totalOctaveNotes - 1; row >= 0; row--) {
-    $("#sequence").append("<div id='row" + row + "'>");
+    grid += "<div class='row'>";
+    grid += "<div class='sixteen columns'>";
     for (var col = 0; col < songInfo.sequenceLength; col++) {
       var buttonId = row + (col * songInfo.totalOctaveNotes);
       if (songInfo.sequences[songInfo.channel][songInfo.currentInstrument][buttonId] > -1) {
@@ -55,10 +57,13 @@ function initGrid(songInfo) {
       else {
         image = "images/button_note.png";
       }
-      $("#sequence").append("<a href='#'><img class='note' id='" + buttonId + "' src='" + image + "' gumby-retina></a>");
+      grid += "<div class='one columns'>";
+      grid += "<a href='#'><img class='note' id='" + buttonId + "' src='" + image + "' gumby-retina></a>";
+      grid += "</div>";
     };
-    $("#sequence").append("</div>");
+    grid += "</div></div>";
   };
+  $("#sequence").append(grid);
 };
 
 
