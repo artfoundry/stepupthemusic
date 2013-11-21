@@ -69,7 +69,7 @@ var ColorSphereBackground = function() {
       var g = ctx.createLinearGradient(x, top, y, left);
       g.addColorStop(0, "#000");
       g.addColorStop(.5, "hsl("+((n + 60) % 360)+",100%,50%)");
-      g.addColorStop(1, "#FFF");
+      g.addColorStop(1, "#666");
       ctx.beginPath(); // draw triangle
       ctx.moveTo(x, top);
       ctx.lineTo(x, y);
