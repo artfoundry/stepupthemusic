@@ -56,6 +56,7 @@ function updateUIafterLogin() {
     event.preventDefault();
     createNewSong();
   });
+  ColorSphereBackground();
 };
 
 function isConnected(username) {
