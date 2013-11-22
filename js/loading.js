@@ -16,7 +16,8 @@ function initSequencer() {
       newUser = new User;
       $("#login").toggle();
       newUser.verifyLogin();
-      $("#loadMessage").text("");
+      newSong = new Song();
+      $("#loadMessage").toggle();
     }
   });
 };
@@ -117,7 +118,7 @@ function loadSong(songname, songIsNew) {
   if (newUser.currentSong !== "") {
     newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
   };
-  newSong = new Song(songname);
+  newSong.songname = songname;
   newUser.currentSong = songname;
   newSong.initNotes();
   if (songIsNew) {
