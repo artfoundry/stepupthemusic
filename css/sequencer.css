@@ -30,6 +30,14 @@ body {
   /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a25be', endColorstr='#003a25be',GradientType=0 ); /* IE6-9 */
 }
 
+.dropdown {
+  max-height: 700px;
+}
+
+.dropmenu {
+  overflow: auto;
+}
+
 .note {
   width: 40px;
   height: 40px;
