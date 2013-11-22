@@ -50,13 +50,6 @@ body {
   height: 70%;
 }
 
-.selected {
-  border-width: 2px;
-  border-radius: 10px;
-  border-style: solid;
-  border-color: #b46b33;
-}
-
 .lightOn {
   background-color: #b46b33;
 }
@@ -72,19 +65,8 @@ body {
   display: none;
 }
 
-/*div {
-  border-style: solid;
-  border-color: white;
-  border-width: 1px;
-}*/
-
-#play {
-  width: 100px;
-  text-align: center;
-}
-
 .channel {
-  width: 35px;
+  width: 45px;
 }
 
 .instr {
@@ -92,7 +74,7 @@ body {
 }
 
 .instrument {
-  font-size: 50%;
+  width: 160px;
 }
 
 #login {
@@ -131,6 +113,38 @@ body {
 }
 
 #title {
-  margin-top: 20em;
+  background-color: #3a25be;
+  opacity: .8;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: #3e74be;  
+  margin-top: 10em;
   height: 20em;
+  padding-top: 10em;
+}
+
+#controlPanel {
+  background-color: #3a25be;
+  opacity: .8;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: #3e74be;  
+  padding: 1em;
+}
+
+#logo {
+  width: 30%;
+  margin-top: .7em;
+}
+
+#biglogo {
+  width: 80%;
+  margin-top: 2em;
+}
+
+#loadMessage {
+  margin-top: 20em;
+  text-align: center;
 }
