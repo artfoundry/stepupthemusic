@@ -19,10 +19,20 @@ User.prototype.updateConnectStatus = function() {
     if (snapshot.val() === true) {
       var connectedDevice = myConnectionsRef.push(true);
       connectedDevice.onDisconnect().remove();
-      // var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
-      // if ((myConnectionsRef === null) && (newSong !== undefined)) {
-      //   songFBRef.child(newSong.songname).child(i).update({free: true}); // set channel to available
-      // };
+      var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
+      songFBRef.once('value', function(songSnapshot) {
+        if (newSong.songname !== "") {
+          var currentSong = newSong.songname;
+          songChannels = songSnapshot.child(currentSong).val();
+          if (myConnectionsRef === null) { // if user has been in a song and is now offline 
+            for (var i = 0; i < 4; i++) {
+              if (songChannels[i].free === newUser.userLogin[0].value) {
+                newSong.firebaseSetChannelStatus(true, i); // set channel to available
+              };
+            };
+          };
+        };
+      })
     };
   });
 };
@@ -78,12 +88,7 @@ User.prototype.printSongList = function(listSelector) {
   songListFBRef.on('child_added', function(songSnapshot) {
     var songName = songSnapshot.name();
     // if song is not already listed in the user list, then ok to list in public list
-    if (listSelector === "#publicSonglist") {
-      $(listSelector).append("<li id='" + songName + "'><a href='#'>" + songName + "</a></li>");
-    }
-    else {
-      $(listSelector).append("<li id='" + songName + "'><a href='#'>" + songName + "</a></li>");
-    };
+    $(listSelector).append("<li id='" + songName + "'><a href='#'>" + songName + "</a></li>");
     $("#" + songName).on("click", function(event) {
       event.preventDefault();
       var clickedSong = $(this).text();
