@@ -58,19 +58,12 @@ body {
   height: 70%;
 }
 
-.lightOn {
-  background-color: #b46b33;
-}
-
-.lightOff {
-  background-color: transparent;
-  transition: background-color .25s ease-in-out;
-  -moz-transition: background-color .25s ease-in-out;
-  -webkit-transition: background-color .25s ease-in-out;
-}
-
 .hidden {
   display: none;
+}
+
+#play {
+  width: 140px;
 }
 
 .channel {
@@ -133,6 +126,7 @@ body {
 }
 
 #controlPanel {
+  max-height: 43em;
   max-width: 11.5em;
   background-color: #3e74be;
   opacity: .8;
@@ -140,13 +134,21 @@ body {
   border-width: 1px;
   border-radius: 10px;
   border-color: #3a25be;  
-  padding: 1em;
+  padding: .5em 1em .5em 1em;
   text-align: center;
+}
+
+.panelHeaders {
+  color: black;
 }
 
 #trackinfo {
   text-align: left;
   color: white;
+}
+
+.musician {
+  margin-top: .2em;
 }
 
 #logo {

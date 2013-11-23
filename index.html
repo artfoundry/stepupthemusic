@@ -112,30 +112,48 @@
 
       <div class="three columns" id="controlPanel">
         <ul>
-          <li>
+          <li style="max-height: 4.8em;">
             <img id="play" src="images/button_play.png">
           </li>
           <li>
-            <h4>Tracks</h4>
-            <div class="row">
-              <div class="sixteen columns">
+            <h4 class="panelHeaders">Tracks</h4>
+            <div class="sixteen columns" id="trackinfo">
+              <div class="row">
                 <div class="four columns">
                   <img id="ch0" class="channel" src="images/button_ch0.png">
                 </div>
-                <div class="four columns">
+                <div class="twelve columns musician">
+                  <span id="user1"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="four columns musician">
                   <img id="ch1" class="channel" src="images/button_ch1.png">
                 </div>
-                <div class="four columns">
+                <div class="twelve columns">
+                  <span id="user2"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="four columns musician">
                   <img id="ch2" class="channel" src="images/button_ch2.png">
                 </div>
-                <div class="four columns">
+                <div class="twelve columns">
+                  <span id="user3"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="four columns musician">
                   <img id="ch3" class="channel" src="images/button_ch3.png">
+                </div>
+                <div class="twelve columns">
+                  <span id="user4"></span>
                 </div>
               </div>
             </div>
           </li>
           <li>
-            <h4>Instruments</h4>
+            <h4 class="panelHeaders">Instruments</h4>
             <img class="instrument" id="i0" src="images/button_instr_i0.png">
             <img class="instrument" id="i24" src="images/button_instr_i24.png">
             <img class="instrument" id="i80" src="images/button_instr_i80.png">
@@ -144,15 +162,6 @@
             <img class="instrument" id="i117" src="images/button_instr_i117.png">
           </li>
         </ul>
-        <div id="musicians" class="hidden">
-          <h4>Musicians</h4>
-          <div id="trackinfo">
-            Track 1: <span id="user1"></span><br>
-            Track 2: <span id="user2"></span><br>
-            Track 3: <span id="user3"></span><br>
-            Track 4: <span id="user4"></span>
-          </div>
-        </div>
       </div> <!-- end control panel -->
 
       <div class="twelve columns">

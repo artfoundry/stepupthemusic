@@ -42,7 +42,6 @@ function clearLoginDiv() {
 function initGrid(songInfo) {
   $("#sequence").html("");
   $("#title").html("<h3 class='rotate'>" + songInfo.songname + "</h3>");
-  $("#musicians").toggle(true);
   $("#controls").toggle(true);
   $("#i" + songInfo.currentInstrument).attr("src", "images/button_instr_i" + songInfo.currentInstrument + "_on.png");
   var grid = "";
