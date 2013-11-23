@@ -73,7 +73,7 @@ function Song() {
   this.totalOctaveNotes = (maxOctave * 8) - 1;
   this.sequenceLength = 16;
   this.allNotesInSeq = this.totalOctaveNotes * this.sequenceLength;
-  this.instruments = [0, 24, 30, 33, 73, 118];
+  this.instruments = [0, 24, 80, 94, 39, 117];
   this.currentInstrument = "0"; // ie. acoustic grand piano
   this.sequences = [] // array of sequence hashes, referenced by channel number, with instrument (as key) paired with an array of notes
 
