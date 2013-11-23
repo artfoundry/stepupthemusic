@@ -73,6 +73,7 @@ function Song() {
   this.totalOctaveNotes = (maxOctave * 8) - 1;
   this.sequenceLength = 16;
   this.allNotesInSeq = this.totalOctaveNotes * this.sequenceLength;
+  this.instruments = [0, 24, 30, 33, 73, 118];
   this.currentInstrument = "0"; // ie. acoustic grand piano
   this.sequences = [] // array of sequence hashes, referenced by channel number, with instrument (as key) paired with an array of notes
 
@@ -259,7 +260,28 @@ Song.prototype.changeChannel = function(chosenChannel) {
   });
 };
 
+function clearButtons(selector) {
+  var imageName = "";
+  if ((selector === ".note") || (selector === "#play")) {
+    imageName = selector.slice(1);
+    $(selector).attr("src", "images/button_" + imageName + ".png")
+  }
+  else if (selector === ".instrument") {
+    imageName = "instr_i";
+    for (var i = 0; i < 6; i++) {
+      $("#i" + newSong.instruments[i]).attr("src", "images/button_instr_i" + newSong.instruments[i] + ".png");
+    };
+  }
+  else if (selector === ".channel") {
+    imageName = "ch";
+    for (var i = 0; i < 4; i++) {
+      $("#ch" + i).attr("src", "images/button_ch" + i + ".png");
+    };
+  };
+};
+
 Song.prototype.loadChannel = function() {
+  clearButtons(".channel");
   var songFBRef = new Firebase("https://stepupthemusic.firebaseio.com/songs/" + this.songname);
   var songInfo = this;
   songFBRef.once('value', function(songSnapshot) {
