@@ -19,12 +19,12 @@ body {
 }
 
 .navstyle {
-  background-color: #3a25be;
+  background-color: #3e74be;
   opacity: .8;
   border-style: solid;
   border-width: 1px;
   border-radius: 0 0 10px 10px;
-  border-color: #3e74be;  
+  border-color: #3a25be;  
   /*background: -moz-linear-gradient(top,  rgba(58,37,190,1) 0%, rgba(58,37,190,0.8) 52%, rgba(58,37,190,0) 100%); /* FF3.6+ */
   /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(58,37,190,1)), color-stop(52%,rgba(58,37,190,0.8)), color-stop(100%,rgba(58,37,190,0))); /* Chrome,Safari4+ */
   /*background: -webkit-linear-gradient(top,  rgba(58,37,190,1) 0%,rgba(58,37,190,0.8) 52%,rgba(58,37,190,0) 100%); /* Chrome10+,Safari5.1+ */
@@ -121,12 +121,12 @@ body {
 }
 
 #title {
-  background-color: #3a25be;
+  background-color: #3e74be;
   opacity: .8;
   border-style: solid;
   border-width: 1px;
   border-radius: 10px;
-  border-color: #3e74be;  
+  border-color: #3a25be;  
   margin-top: 10em;
   height: 20em;
   padding-top: 10em;
@@ -134,18 +134,19 @@ body {
 
 #controlPanel {
   max-width: 11.5em;
-  background-color: #3a25be;
+  background-color: #3e74be;
   opacity: .8;
   border-style: solid;
   border-width: 1px;
   border-radius: 10px;
-  border-color: #3e74be;  
+  border-color: #3a25be;  
   padding: 1em;
   text-align: center;
 }
 
 #trackinfo {
   text-align: left;
+  color: white;
 }
 
 #logo {
