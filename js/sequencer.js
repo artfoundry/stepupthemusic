@@ -42,7 +42,6 @@ function clearLoginDiv() {
 function initGrid(songInfo) {
   $("#sequence").html("");
   $("#title").html("<h3 class='rotate'>" + songInfo.songname + "</h3>");
-  $("#musicians").toggle(true);
   $("#controls").toggle(true);
   $("#i" + songInfo.currentInstrument).attr("src", "images/button_instr_i" + songInfo.currentInstrument + "_on.png");
   var grid = "";
@@ -73,6 +72,7 @@ function Song() {
   this.totalOctaveNotes = (maxOctave * 8) - 1;
   this.sequenceLength = 16;
   this.allNotesInSeq = this.totalOctaveNotes * this.sequenceLength;
+  this.instruments = [0, 24, 80, 94, 39, 117];
   this.currentInstrument = "0"; // ie. acoustic grand piano
   this.sequences = [] // array of sequence hashes, referenced by channel number, with instrument (as key) paired with an array of notes
 
@@ -259,7 +259,28 @@ Song.prototype.changeChannel = function(chosenChannel) {
   });
 };
 
+function clearButtons(selector) {
+  var imageName = "";
+  if ((selector === ".note") || (selector === "#play")) {
+    imageName = selector.slice(1);
+    $(selector).attr("src", "images/button_" + imageName + ".png")
+  }
+  else if (selector === ".instrument") {
+    imageName = "instr_i";
+    for (var i = 0; i < 6; i++) {
+      $("#i" + newSong.instruments[i]).attr("src", "images/button_instr_i" + newSong.instruments[i] + ".png");
+    };
+  }
+  else if (selector === ".channel") {
+    imageName = "ch";
+    for (var i = 0; i < 4; i++) {
+      $("#ch" + i).attr("src", "images/button_ch" + i + ".png");
+    };
+  };
+};
+
 Song.prototype.loadChannel = function() {
+  clearButtons(".channel");
   var songFBRef = new Firebase("https://stepupthemusic.firebaseio.com/songs/" + this.songname);
   var songInfo = this;
   songFBRef.once('value', function(songSnapshot) {
@@ -275,11 +296,11 @@ Song.prototype.loadChannel = function() {
   });
 };
 
-// currently using notes D3-D5
+// currently using notes G2-G4
 Song.prototype.toggleNote = function(noteId, event) {
   var instrument = Object.keys(this.sequences[this.channel])
   if (this.sequences[this.channel][instrument][noteId] === -1) {
-    this.sequences[this.channel][instrument][noteId] = convertNoteIdToValue(noteId, this) + 50; // adding 50 converts an ID of 0 to D3
+    this.sequences[this.channel][instrument][noteId] = convertNoteIdToValue(noteId, this) + 43; // adding 43 converts an ID of 0 to G2 (every 12 equals an octave)
     $("#" + noteId).attr("src","images/button_note_pressed.png");
   }
   else {

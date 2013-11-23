@@ -14,13 +14,17 @@ body {
   z-index: -1;
 }
 
+.navbar {
+  max-height: 61px;
+}
+
 .navstyle {
-  background-color: #3a25be;
+  background-color: #3e74be;
   opacity: .8;
   border-style: solid;
   border-width: 1px;
   border-radius: 0 0 10px 10px;
-  border-color: #3e74be;  
+  border-color: #3a25be;  
   /*background: -moz-linear-gradient(top,  rgba(58,37,190,1) 0%, rgba(58,37,190,0.8) 52%, rgba(58,37,190,0) 100%); /* FF3.6+ */
   /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(58,37,190,1)), color-stop(52%,rgba(58,37,190,0.8)), color-stop(100%,rgba(58,37,190,0))); /* Chrome,Safari4+ */
   /*background: -webkit-linear-gradient(top,  rgba(58,37,190,1) 0%,rgba(58,37,190,0.8) 52%,rgba(58,37,190,0) 100%); /* Chrome10+,Safari5.1+ */
@@ -30,17 +34,21 @@ body {
   /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a25be', endColorstr='#003a25be',GradientType=0 ); /* IE6-9 */
 }
 
+.dropmenu {
+  overflow: auto;
+}
+
 .note {
-  width: 40px;
-  height: 40px;
+  width: 33px;
+  height: 33px;
   margin: 1px;
   padding: 0;
   background-color: transparent;
 }
 
 .marker {
-  width: 20px;
-  height: 40px;  
+  width: 17px;
+  height: 30px;  
   margin-left: .6em;
   padding: 0;
 }
@@ -50,31 +58,24 @@ body {
   height: 70%;
 }
 
-.lightOn {
-  background-color: #b46b33;
-}
-
-.lightOff {
-  background-color: transparent;
-  transition: background-color .25s ease-in-out;
-  -moz-transition: background-color .25s ease-in-out;
-  -webkit-transition: background-color .25s ease-in-out;
-}
-
 .hidden {
   display: none;
+}
+
+#play {
+  width: 140px;
 }
 
 .channel {
   width: 45px;
 }
 
-.instr {
+.instrDiv {
   width: 150px;
 }
 
 .instrument {
-  width: 160px;
+  height: 50px;
 }
 
 #login {
@@ -95,11 +96,11 @@ body {
 }
 
 .rotate {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  transform: rotate(-90deg);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
 
   /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
   -webkit-transform-origin: 50% 50%;
@@ -113,25 +114,41 @@ body {
 }
 
 #title {
-  background-color: #3a25be;
+  background-color: #3e74be;
   opacity: .8;
   border-style: solid;
   border-width: 1px;
   border-radius: 10px;
-  border-color: #3e74be;  
+  border-color: #3a25be;  
   margin-top: 10em;
   height: 20em;
   padding-top: 10em;
 }
 
 #controlPanel {
-  background-color: #3a25be;
+  max-height: 43em;
+  max-width: 11.5em;
+  background-color: #3e74be;
   opacity: .8;
   border-style: solid;
   border-width: 1px;
   border-radius: 10px;
-  border-color: #3e74be;  
-  padding: 1em;
+  border-color: #3a25be;  
+  padding: .5em 1em .5em 1em;
+  text-align: center;
+}
+
+.panelHeaders {
+  color: black;
+}
+
+#trackinfo {
+  text-align: left;
+  color: white;
+}
+
+.musician {
+  margin-top: .2em;
 }
 
 #logo {

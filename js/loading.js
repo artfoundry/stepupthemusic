@@ -7,10 +7,10 @@ function initSequencer() {
     soundfontUrl: "./soundfont/",
     instruments: ["acoustic_grand_piano", 
                   "acoustic_guitar_nylon", 
-                  "distortion_guitar", 
-                  "electric_bass_finger", 
-                  "flute", 
-                  "synth_drum"
+                  "lead_1_square", 
+                  "melodic_tom", 
+                  "pad_7_halo", 
+                  "synth_bass_2"
                   ],
     callback: function() {
       newUser = new User;

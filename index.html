@@ -47,7 +47,7 @@
 <canvas id="canvasSection">Error, canvas is not supported</canvas>
 
   <div id="login" class="hidden">
-    <img id="biglogo" src="images/logo.png" gumby-retina />
+    <img id="biglogo" src="images/logo.png" />
     <h5>Please create an account/login so you can save your songs</h5>
     <form action="">
       <ul>
@@ -72,7 +72,7 @@
   </div>
 
   <div id="loadMessage">
-    <img src="images/logo.png" gumby-retina />
+    <img src="images/logo.png" />
     <h3>Loading (this could take up to 10 seconds)...</h3>
   </div>  
 
@@ -82,57 +82,107 @@
       <!-- Toggle for mobile navigation, targeting the <ul> -->
       <a class="toggle" gumby-trigger="#nav1 > ul" href="#"><i class="icon-menu"></i></a>
       <div class="four columns" id="logo">
-          <img src="images/logo.png" gumby-retina />
+          <img src="images/logo.png" />
       </div>
       <ul class="six columns">
         <li><a href="#" id="createsong">Create New Song</a></li>
         <li>
           <a href="#">Your Songs</a>
-          <div class="dropdown">
-            <ul id="userSonglist">
+          <div class="dropdown" style="max-width: 20%;">
+            <ul class="dropmenu" id="userSonglist">
 
             </ul>
           </div>
         </li>
         <li>
           <a href="#">All Songs</a>
-          <div class="dropdown">
-            <ul id="publicSonglist">
+          <div class="dropdown" style="max-width: 20%;">
+            <ul class="dropmenu" id="publicSonglist">
 
             </ul>
           </div>
         </li>
       </ul>
     </div>
-  </div> <!-- End Navbar -->
+  </div>  <!-- End Navbar -->
 
   <!-- Controls -->
   <div id="controls" class="hidden">
     <div class="row">
-      <div class="one columns">
-        <div id="title">
 
-        </div>
-      </div>      
-      <div class="twelve columns">  
+      <div class="three columns" id="controlPanel">
+        <ul>
+          <li style="max-height: 4.8em;">
+            <img id="play" src="images/button_play.png">
+          </li>
+          <li>
+            <h4 class="panelHeaders">Tracks</h4>
+            <div class="sixteen columns" id="trackinfo">
+              <div class="row">
+                <div class="four columns">
+                  <img id="ch0" class="channel" src="images/button_ch0.png">
+                </div>
+                <div class="twelve columns musician">
+                  <span id="user1"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="four columns musician">
+                  <img id="ch1" class="channel" src="images/button_ch1.png">
+                </div>
+                <div class="twelve columns">
+                  <span id="user2"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="four columns musician">
+                  <img id="ch2" class="channel" src="images/button_ch2.png">
+                </div>
+                <div class="twelve columns">
+                  <span id="user3"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="four columns musician">
+                  <img id="ch3" class="channel" src="images/button_ch3.png">
+                </div>
+                <div class="twelve columns">
+                  <span id="user4"></span>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <h4 class="panelHeaders">Instruments</h4>
+            <img class="instrument" id="i0" src="images/button_instr_i0.png">
+            <img class="instrument" id="i24" src="images/button_instr_i24.png">
+            <img class="instrument" id="i80" src="images/button_instr_i80.png">
+            <img class="instrument" id="i94" src="images/button_instr_i94.png">
+            <img class="instrument" id="i39" src="images/button_instr_i39.png">
+            <img class="instrument" id="i117" src="images/button_instr_i117.png">
+          </li>
+        </ul>
+      </div> <!-- end control panel -->
+
+      <div class="twelve columns">
         <div class="row">
           <div class="sixteen columns">
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m0" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m1" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m2" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m3" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m4" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m5" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m6" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m7" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m8" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m9" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m10" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m11" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m12" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m13" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m14" src="images/button_note.png" gumby-retina></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m15" src="images/button_note.png" gumby-retina></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m0" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m1" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m2" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m3" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m4" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m5" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m6" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m7" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m8" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m9" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m10" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m11" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m12" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m13" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m14" src="images/button_note.png"></div></div>
+            <div class="one columns"><div class="marker"><img class="markerimg" id="m15" src="images/button_note.png"></div></div>
           </div> <!-- end sixteen columns -->
         </div> <!-- end row -->
         <div id="sequence">
@@ -140,39 +190,11 @@
         </div>
       </div> <!-- end twelve columns -->
 
-      <div class="three columns" id="controlPanel">
-        <ul>
-          <li class="field">
-            <div>
-              <img id="play" src="images/button_play.png" gumby-retina>
-            </div>
-          </li>
-          <li class="prepend field">
-            <h4>Tracks</h4>
-            <img id="ch0" class="channel" src="images/button_ch0.png" gumby-retina>
-            <img id="ch1" class="channel" src="images/button_ch1.png" gumby-retina>
-            <img id="ch2" class="channel" src="images/button_ch2.png" gumby-retina>
-            <img id="ch3" class="channel" src="images/button_ch3.png" gumby-retina>
-          </li>
-          <li class="field">
-            <h4>Instruments</h4>
-            <img class="instrument" id="i0" src="images/button_instr_i0.png" gumby-retina>
-            <img class="instrument" id="i24" src="images/button_instr_i24.png" gumby-retina>
-            <div class="btn secondary medium pretty instr"><button class="instrument" id="i30">Distortion Guitar</button></div>
-            <div class="btn secondary medium pretty instr"><button class="instrument" id="i33">Electric Bass, Fingered</button></div>
-            <div class="btn secondary medium pretty instr"><button class="instrument" id="i73">Flute</button></div>
-            <div class="btn secondary medium pretty instr"><button class="instrument" id="i118">Synth Drum</button></div>
-          </li>
-        </ul>
+      <div class="one columns">
+        <div id="title">
 
-        <div id="musicians" class="hidden">
-          <h4>Musicians</h4>
-          Track 1: <span id="user1"></span><br>
-          Track 2: <span id="user2"></span><br>
-          Track 3: <span id="user3"></span><br>
-          Track 4: <span id="user4"></span>
         </div>
-      </div> <!-- end columns -->
+      </div>
     </div> <!-- end row -->    
   </div> <!-- end controls -->
 
