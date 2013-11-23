@@ -14,6 +14,10 @@ body {
   z-index: -1;
 }
 
+.navbar {
+  max-height: 61px;
+}
+
 .navstyle {
   background-color: #3a25be;
   opacity: .8;
@@ -30,25 +34,21 @@ body {
   /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a25be', endColorstr='#003a25be',GradientType=0 ); /* IE6-9 */
 }
 
-.dropdown {
-  max-height: 700px;
-}
-
 .dropmenu {
   overflow: auto;
 }
 
 .note {
-  width: 40px;
-  height: 40px;
+  width: 33px;
+  height: 33px;
   margin: 1px;
   padding: 0;
   background-color: transparent;
 }
 
 .marker {
-  width: 20px;
-  height: 40px;  
+  width: 17px;
+  height: 30px;  
   margin-left: .6em;
   padding: 0;
 }
@@ -77,12 +77,12 @@ body {
   width: 45px;
 }
 
-.instr {
+.instrDiv {
   width: 150px;
 }
 
 .instrument {
-  width: 160px;
+  height: 50px;
 }
 
 #login {
@@ -103,11 +103,11 @@ body {
 }
 
 .rotate {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  transform: rotate(-90deg);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
 
   /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
   -webkit-transform-origin: 50% 50%;
@@ -133,6 +133,7 @@ body {
 }
 
 #controlPanel {
+  max-width: 11.5em;
   background-color: #3a25be;
   opacity: .8;
   border-style: solid;
@@ -140,6 +141,11 @@ body {
   border-radius: 10px;
   border-color: #3e74be;  
   padding: 1em;
+  text-align: center;
+}
+
+#trackinfo {
+  text-align: left;
 }
 
 #logo {
