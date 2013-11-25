@@ -113,18 +113,6 @@ body {
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
-#title {
-  background-color: #3e74be;
-  opacity: .8;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 10px;
-  border-color: #3a25be;  
-  margin-top: 10em;
-  height: 20em;
-  padding-top: 10em;
-}
-
 #controlPanel {
   max-height: 43em;
   max-width: 11.5em;
