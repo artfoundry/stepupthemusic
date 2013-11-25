@@ -22,29 +22,61 @@ function initSequencer() {
   });
 };
 
-function createNewSong() {
-  var newSongName = window.prompt("Please enter a song name:");
-  var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
-  publicSongListFBRef.once('value', function(songsSnapshot) {
-    if (songsSnapshot.hasChild('songs')) {
-      var songList = Object.keys(songsSnapshot.val());
-      var notNew = true;
-      while (notNew) {
-        for (var i = 0; i < songList.length; i++) {
-          if (newSongName === songList[i]) {
-            i = songList.length + 1;
-          };
-        };
-        if (i === songList.length + 2) {
-          newSongName = window.prompt("That name is already taken. Please enter a different name:");
-        }
-        else {
-          notNew = false;
+function checkName(name, list, type) {
+  var newName = "";
+  var needNewName = true;
+  var searchStr = new RegExp(/[^a-z, 0-9, _, \-]/i);
+  if (type === "song") {
+    newName = name;
+    while (needNewName) {
+      for (var i = 0; i < list.length; i++) {
+        if (newName === list[i]) {
+          i = list.length + 1;
         };
       };
+      if (i === list.length + 2) {
+        newName = window.prompt("That name is already taken. Please enter a different name.");
+      }
+      else if (searchStr.test(newName)) {
+        newName = window.prompt("Only alphanumeric characters (a-z and 0-9), spaces, underscores (_), and dashes (-) are accepted. Please enter a different name.");
+      }
+      else {
+        needNewName = false;
+      };
     };
-    var songIsNew = true;
-    loadSong(newSongName, songIsNew);
+  }
+  else if (type === "user") {
+    for (var i = 0; i < list.length; i++) {
+      if (name === list[i]) {
+        i = list.length + 1;
+      };
+    };
+    if (i === list.length + 2) {
+      alert("That name is already taken. Please enter a different name.");
+    }
+    else if (searchStr.test(name)) {
+      alert("Only alphanumeric characters (a-z and 0-9), spaces, underscores (_), and dashes (-) are accepted. Please enter a different name.");
+    }
+    else {
+      newName = name;
+    };
+  };
+  return newName;
+};
+
+function createNewSong() {
+  var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/');
+  publicSongListFBRef.once('value', function(songsSnapshot) {
+    var songList = [];
+    if (songsSnapshot.hasChild('songs')) {
+      songList = Object.keys(songsSnapshot.child("songs").val());
+    };
+    var newSongName = window.prompt("Please enter a song name:");
+    if (newSongName) {
+      newSongName = checkName(newSongName, songList, "song");
+      var songIsNew = true;
+      loadSong(newSongName, songIsNew);
+    };
   });
 };
 
