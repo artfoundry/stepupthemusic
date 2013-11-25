@@ -62,17 +62,27 @@ User.prototype.verifyLogin = function() {
 };
 
 User.prototype.createUser = function() {
-  user = this;
+  var user = this;
   $("#login").on("submit", "#createuser", function(event){
     event.preventDefault();
     user.userLogin = $(this).serializeArray()
-    if ((user.userLogin[0]) && (user.userLogin[1])) {
-      var allUsersFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/');
-      allUsersFBRef.child(user.userLogin[0].value).set({pw: user.userLogin[1].value});
-      updateUIafterLogin();
+    if ((user.userLogin[0].value) && (user.userLogin[1].value)) {
+      var allUsersFBRef = new Firebase('https://stepupthemusic.firebaseio.com/');
+      allUsersFBRef.once('value', function(usersSnapshot) {
+        var userList = [];
+        if (usersSnapshot.hasChild('users')) {
+          var userList = Object.keys(usersSnapshot.child("users").val());
+        };
+        var newName = checkName(user.userLogin[0].value, userList, "user");
+        if (newName !== "") { // empty string if there was an error
+          user.userLogin[0].value = newName;
+          allUsersFBRef.child("users").child(newName).set({pw: user.userLogin[1].value});
+          updateUIafterLogin();
+        };
+      });
     }
     else {
-      alert("Invalid info. Try again.");
+      alert("You need to enter both user name and password. Please try again.");
     };
   }); 
 };
@@ -82,16 +92,21 @@ User.prototype.printSongList = function(listSelector) {
   if (listSelector === "#publicSonglist") { // if songlist is the public list, which comes in as hash
     var songListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
   }
-  else {
+  else if (listSelector === "#userSonglist") {
     var songListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + this.userLogin[0].value + '/songs/');
   };
   songListFBRef.on('child_added', function(songSnapshot) {
     var songName = songSnapshot.name();
+    var nameNoSpaces = {};
+    nameNoSpaces[songName] = songName.replace(/\s+/g, "");
     // if song is not already listed in the user list, then ok to list in public list
-    $(listSelector).append("<li id='" + songName + "'><a href='#'>" + songName + "</a></li>");
-    $("#" + songName).on("click", function(event) {
+    $(listSelector).append("<li id='" + nameNoSpaces[songName] + "'><a href='#'>" + songName + "</a></li>");
+    $("#" + nameNoSpaces[songName]).on("click", function(event) {
       event.preventDefault();
       var clickedSong = $(this).text();
+      if (clickedSong === nameNoSpaces[songName]) { //need to convert the captured spaceless name back to original
+        clickedSong = songName;
+      };
       loadCheck(clickedSong);
     });
   });

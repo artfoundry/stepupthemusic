@@ -78,6 +78,10 @@ body {
   height: 50px;
 }
 
+.instrument:hover, .channel:hover, #play:hover, .note:hover  {
+  cursor: pointer;
+}
+
 #login {
   background-color: #3e74be;
   opacity: .8;
@@ -89,10 +93,6 @@ body {
   border-color: #3a25be;
   margin: 15em auto auto auto;
   text-align: center;
-}
-
-#createform {
-  margin-top: 4em;
 }
 
 .rotate {
