@@ -115,7 +115,7 @@ body {
   height: 50px;
 }
 
-.instrument:hover, .channel:hover, #play:hover, .note:hover, #createsong:hover  {
+.instrument:hover, .channel:hover, #play:hover, .note:hover, #createsong:hover, #create  {
   cursor: pointer;
 }
 
