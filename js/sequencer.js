@@ -37,7 +37,7 @@ function calcDelay(tempo) {
 
 function printTitle(songname) {
   var letter = "";
-  var songArray = songname.split("");
+  var songArray = songname.toLowerCase().split("");
   $("#title").html("");
   $.each(songArray, function(index, value) {
     $("#title").append("<img src='images/letter_" + value + ".png'>");
