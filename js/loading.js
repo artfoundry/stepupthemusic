@@ -22,44 +22,17 @@ function initSequencer() {
   });
 };
 
-function checkName(name, list, type) {
+function checkName(name, list) {
+  var searchStr = new RegExp(/[^a-z0-9 \-]/i);
   var newName = "";
-  var needNewName = true;
-  var searchStr = new RegExp(/[^a-z, 0-9, _, \-]/i);
-  if (type === "song") {
-    newName = name;
-    while (needNewName) {
-      for (var i = 0; i < list.length; i++) {
-        if (newName === list[i]) {
-          i = list.length + 1;
-        };
-      };
-      if (i === list.length + 2) {
-        newName = window.prompt("That name is already taken. Please enter a different name.");
-      }
-      else if (searchStr.test(newName)) {
-        newName = window.prompt("Only alphanumeric characters (a-z and 0-9), spaces, underscores (_), and dashes (-) are accepted. Please enter a different name.");
-      }
-      else {
-        needNewName = false;
-      };
-    };
+  if (list.indexOf(name) > -1) {
+    alert("That name is already taken. Please enter a different name.");
   }
-  else if (type === "user") {
-    for (var i = 0; i < list.length; i++) {
-      if (name === list[i]) {
-        i = list.length + 1;
-      };
-    };
-    if (i === list.length + 2) {
-      alert("That name is already taken. Please enter a different name.");
-    }
-    else if (searchStr.test(name)) {
-      alert("Only alphanumeric characters (a-z and 0-9), spaces, underscores (_), and dashes (-) are accepted. Please enter a different name.");
-    }
-    else {
-      newName = name;
-    };
+  else if (name.search(searchStr) > -1) {
+    alert("Only alphanumeric characters (a-z and 0-9), spaces, and dashes (-) are accepted. Please enter a different name.");
+  }
+  else {
+    newName = name;
   };
   return newName;
 };
@@ -71,13 +44,31 @@ function createNewSong() {
     if (songsSnapshot.hasChild('songs')) {
       songList = Object.keys(songsSnapshot.child("songs").val());
     };
-    var newSongName = window.prompt("Please enter a song name:");
-    if (newSongName) {
-      newSongName = checkName(newSongName, songList, "song");
-      var songIsNew = true;
-      loadSong(newSongName, songIsNew);
-    };
+    $("#songformdiv").on("submit", "#songform", function(event){
+      event.preventDefault();
+      var newSongName = $(this).serializeArray();
+      newSongName = checkName(newSongName[0].value, songList);
+      if (newSongName !== "") {
+        var songIsNew = true;
+        loadSong(newSongName, songIsNew);
+      }
+    });
   });
+};
+
+function toggleCreateForm() {
+  if ($("#songformdiv").hasClass("songform_hidden")) {
+    $("#createsong").attr("src", "images/button_create_on.png");
+    $("#songformdiv").removeClass("songform_hidden");
+    $("#songformdiv").addClass("songform_slide");
+    // $("#songname").attr("placeholder", "Song name");
+  }
+  else {
+    $("#createsong").attr("src", "images/button_create.png");
+    $("#songformdiv").removeClass("songform_slide"); 
+    $("#songformdiv").addClass("songform_hidden");
+  };
+
 };
 
 function updateUIafterLogin() {
@@ -87,6 +78,7 @@ function updateUIafterLogin() {
   newUser.listAllSongs();
   $("#createsong").on("click", function(){
     event.preventDefault();
+    toggleCreateForm();
     createNewSong();
   });
   ColorSphereBackground();
@@ -146,14 +138,15 @@ function loadCheck(clickedSong) {
 };
 
 function loadSong(songname, songIsNew) {
-  clearLoginDiv();
   if (newUser.currentSong !== "") {
     newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
   };
+  newSong = new Song();
   newSong.songname = songname;
   newUser.currentSong = songname;
   newSong.initNotes();
   if (songIsNew) {
+    toggleCreateForm();
     newSong.firebaseNewSong();
     newSong.firebaseSetChannelStatus("init", 0);
     newSong.firebaseInitSongData();

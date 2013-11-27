@@ -24,14 +24,32 @@ body {
   border-style: solid;
   border-width: 1px;
   border-radius: 0 0 10px 10px;
-  border-color: #3a25be;  
-  /*background: -moz-linear-gradient(top,  rgba(58,37,190,1) 0%, rgba(58,37,190,0.8) 52%, rgba(58,37,190,0) 100%); /* FF3.6+ */
-  /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(58,37,190,1)), color-stop(52%,rgba(58,37,190,0.8)), color-stop(100%,rgba(58,37,190,0))); /* Chrome,Safari4+ */
-  /*background: -webkit-linear-gradient(top,  rgba(58,37,190,1) 0%,rgba(58,37,190,0.8) 52%,rgba(58,37,190,0) 100%); /* Chrome10+,Safari5.1+ */
-  /*background: -o-linear-gradient(top,  rgba(58,37,190,1) 0%,rgba(58,37,190,0.8) 52%,rgba(58,37,190,0) 100%); /* Opera 11.10+ */
-  /*background: -ms-linear-gradient(top,  rgba(58,37,190,1) 0%,rgba(58,37,190,0.8) 52%,rgba(58,37,190,0) 100%); /* IE10+ */
-  /*background: linear-gradient(to bottom,  rgba(58,37,190,1) 0%,rgba(58,37,190,0.8) 52%,rgba(58,37,190,0) 100%); /* W3C */
-  /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a25be', endColorstr='#003a25be',GradientType=0 ); /* IE6-9 */
+  border-color: #3a25be;
+  width: 70em;
+}
+
+#createsong {
+  width: 120px;
+}
+
+#songbuttondiv {
+  width: 30em; 
+  max-height: 2em;
+  padding-left: 1em;
+}
+
+.songform_hidden {
+  position: fixed;
+  transition: .5s;
+  top: -3em;  
+  margin-top: .4em;
+}
+
+.songform_slide {
+  position: fixed;
+  transition: .5s;
+  top: 0;
+  margin-top: .4em;
 }
 
 .dropmenu {
@@ -78,7 +96,7 @@ body {
   height: 50px;
 }
 
-.instrument:hover, .channel:hover, #play:hover, .note:hover  {
+.instrument:hover, .channel:hover, #play:hover, .note:hover, #createsong:hover  {
   cursor: pointer;
 }
 
