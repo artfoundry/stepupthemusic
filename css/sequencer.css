@@ -51,6 +51,12 @@ body {
   width: 120px;
 }
 
+@-moz-document url-prefix() {
+  #createsong {
+    margin-top: -30px;  
+  }
+}
+
 #songbuttondiv {
   width: 30em;
   max-height: 2em;

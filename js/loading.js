@@ -78,7 +78,6 @@ function updateUIafterLogin() {
   newUser.listUserSongs();
   newUser.listAllSongs();
   $("#createsong").on("click", function(){
-    event.preventDefault();
     toggleCreateForm();
     createNewSong();
   });
