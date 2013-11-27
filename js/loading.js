@@ -61,7 +61,7 @@ function toggleCreateForm() {
     $("#createsong").attr("src", "images/button_create_on.png");
     $("#songformdiv").removeClass("songform_hidden");
     $("#songformdiv").addClass("songform_slide");
-    // $("#songname").attr("placeholder", "Song name");
+    $("#songname").val("");
   }
   else {
     $("#createsong").attr("src", "images/button_create.png");
