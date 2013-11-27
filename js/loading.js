@@ -67,6 +67,7 @@ function toggleCreateForm() {
     $("#createsong").attr("src", "images/button_create.png");
     $("#songformdiv").removeClass("songform_slide"); 
     $("#songformdiv").addClass("songform_hidden");
+    $("#songformdiv").off("submit");
   };
 
 };
@@ -155,7 +156,9 @@ function loadSong(songname, songIsNew) {
   };
   newSong.firebaseGetSongData();
   newSong.loadChannel();
-  newSong.updateInstrument();
+  if (songIsNew === false) {
+    newSong.updateInstrument();
+  };
   initGrid(newSong);
   newSong.updateGrid();
   removeListeners();

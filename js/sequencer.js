@@ -35,10 +35,6 @@ function calcDelay(tempo) {
   return delay;
 };
 
-function clearLoginDiv() {
-  $("#login").html("");  
-};
-
 function printTitle(songname) {
   var letter = "";
   var songArray = songname.split("");
@@ -141,7 +137,7 @@ Song.prototype.getFBSongDataWorker = function(songSnapshot) {
 Song.prototype.firebaseGetSongData = function () {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
   var song = this;
-  publicSongListFBRef.on('value', function(songSnapshot) {
+  publicSongListFBRef.once('value', function(songSnapshot) { // set to once because when on, initializing FB channels removes local song data
     if (songSnapshot.hasChild(song.songname)) {
       song.getFBSongDataWorker(songSnapshot.child(song.songname));
     };
@@ -207,7 +203,6 @@ Song.prototype.addListeners = function() {
       songInfo.clearButtons(".channel");
       songInfo.changeChannel(parseInt(event.target.id.slice(2))); // remove the 'ch' in the id selector
       $("#ch" + songInfo.channel).attr("src", "images/button_ch" + songInfo.channel + "_on.png");
-      songInfo.updateInstrument();
       songInfo.updateGrid();
     }
     else if ($(event.target).hasClass("instrument")) {
@@ -254,6 +249,7 @@ Song.prototype.changeChannel = function(chosenChannel) {
       if (channelStatus === true) {
         songInfo.firebaseSetChannelStatus(true, songInfo.channel);  // free up channel being left    
         songInfo.channel = chosenChannel;
+        songInfo.updateInstrument();
         songInfo.firebaseSetChannelStatus(newUser.getUserLogin("name"), songInfo.channel); // new channel is now taken
       }
       else {
