@@ -205,7 +205,7 @@ Song.prototype.addListeners = function() {
       $("#ch" + songInfo.channel).attr("src", "images/button_ch" + songInfo.channel + "_on.png");
       songInfo.updateGrid();
     }
-    else if ($(event.target).hasClass("instrument")) {
+    else if ($(event.target).hasClass("instrument") && (event.target.id.slice(1) !== songInfo.currentInstrument)) {
       var tempArr = songInfo.sequences[songInfo.channel][songInfo.currentInstrument];
       var lastInstrument = songInfo.currentInstrument;
       songInfo.clearButtons(".instrument");
