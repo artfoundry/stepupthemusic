@@ -35,7 +35,7 @@
   <!-- extras -->
   <script src="inc/Base64.js" type="text/javascript"></script>
   <script src="inc/base64binary.js" type="text/javascript"></script>
-  <!-- sequencer.js -->     
+  <!-- sequencer -->     
   <script src="js/loading.js" type="text/javascript"></script>
   <script src="js/user.js" type="text/javascript"></script>
   <script src="js/sequencer.js" type="text/javascript"></script>
@@ -49,7 +49,7 @@
   <div id="login" class="hidden">
     <img id="biglogo" src="images/logo.png" />
     <h5>Please create an account/login so you can save your songs</h5>
-    <form action="">
+    <form action="" id="loginform">
       <ul>
         <div class="row">
           <div class="centered ten columns">      
@@ -85,7 +85,6 @@
           <img src="images/logo.png" />
       </div>
       <ul class="six columns">
-        <li><a href="#" id="createsong">Create New Song</a></li>
         <li>
           <a href="#">Your Songs</a>
           <div class="dropdown" style="max-width: 20%;">
@@ -102,6 +101,25 @@
             </ul>
           </div>
         </li>
+        <div class="row">
+          <div class="ten columns" id="songbuttondiv">
+            <div class="five columns">
+              <img id="createsong" src="images/button_create.png" />
+            </div>
+            <div class="five columns">
+              <div class="songform_hidden" id="songformdiv">
+                <form action="" id="songform">
+                  <ul>     
+                    <li class="append field">
+                      <input class="wide text input" id="songname" type="text" name="songname" placeholder="Song name" />
+                      <div class="medium primary btn"><input type="submit" value="Create" /></div>
+                    </li>
+                  </ul>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </ul>
     </div>
   </div>  <!-- End Navbar -->
@@ -127,26 +145,26 @@
                 </div>
               </div>
               <div class="row">
-                <div class="four columns musician">
+                <div class="four columns">
                   <img id="ch1" class="channel" src="images/button_ch1.png">
                 </div>
-                <div class="twelve columns">
+                <div class="twelve columns musician">
                   <span id="user2"></span>
                 </div>
               </div>
               <div class="row">
-                <div class="four columns musician">
+                <div class="four columns">
                   <img id="ch2" class="channel" src="images/button_ch2.png">
                 </div>
-                <div class="twelve columns">
+                <div class="twelve columns musician">
                   <span id="user3"></span>
                 </div>
               </div>
               <div class="row">
-                <div class="four columns musician">
+                <div class="four columns">
                   <img id="ch3" class="channel" src="images/button_ch3.png">
                 </div>
-                <div class="twelve columns">
+                <div class="twelve columns musician">
                   <span id="user4"></span>
                 </div>
               </div>

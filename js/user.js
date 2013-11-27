@@ -43,7 +43,7 @@ User.prototype.verifyLogin = function() {
     newUser.createUser();
   });
   user = this;
-  $("form").on("submit", function(event) {
+  $("#login").on("submit", "#loginform", function(event) {
     event.preventDefault();
     user.userLogin = $(this).serializeArray();
     var allUsersFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/');

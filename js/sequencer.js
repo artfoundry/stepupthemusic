@@ -39,9 +39,18 @@ function clearLoginDiv() {
   $("#login").html("");  
 };
 
+function printTitle(songname) {
+  var letter = "";
+  var songArray = songname.split("");
+  $("#title").html("");
+  $.each(songArray, function(index, value) {
+    $("#title").append("<img src='images/letter_" + value + ".png'>");
+  });
+};
+
 function initGrid(songInfo) {
   $("#sequence").html("");
-  $("#title").html("<h3 class='rotate'>" + songInfo.songname + "</h3>");
+  printTitle(songInfo.songname);
   $("#controls").toggle(true);
   $("#i" + songInfo.currentInstrument).attr("src", "images/button_instr_i" + songInfo.currentInstrument + "_on.png");
   var grid = "";
