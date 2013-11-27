@@ -9,6 +9,25 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+#logo {
+  width: 30%;
+  margin-top: .7em;
+}
+
+#biglogo {
+  width: 80%;
+  margin-top: 2em;
+}
+
+#loadMessage {
+  margin-top: 20em;
+  text-align: center;
+}
+
+#loading {
+  color: black;
+}
+
 #canvasSection { 
   position:fixed;
   z-index: -1;
@@ -137,19 +156,4 @@ body {
 
 .musician {
   margin-top: .2em;
-}
-
-#logo {
-  width: 30%;
-  margin-top: .7em;
-}
-
-#biglogo {
-  width: 80%;
-  margin-top: 2em;
-}
-
-#loadMessage {
-  margin-top: 20em;
-  text-align: center;
 }
