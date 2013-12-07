@@ -12,6 +12,16 @@ User.prototype.getUserLogin = function(request) {
   };
 };
 
+User.prototype.freeUpChannel = function(newSongName) {
+  if (this.currentSong !== ""){ // if user has already been in a channel
+    if (newSongName !== "") {
+      newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
+    };
+    var userSongFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/' + this.currentSong + '/' + newSong.channel + '/free');
+    userSongFBRef.onDisconnect().set(true); // set channel to available
+  };
+};
+
 User.prototype.updateConnectStatus = function() {
   var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + this.userLogin[0].value + '/connections');
   var connectedRef = new Firebase('https://stepupthemusic.firebaseIO.com/.info/connected');
@@ -20,18 +30,9 @@ User.prototype.updateConnectStatus = function() {
       var connectedDevice = myConnectionsRef.push(true);
       connectedDevice.onDisconnect().remove();
       var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
-      songFBRef.once('value', function(songSnapshot) {
-        if (newSong.songname !== "") {
-          var currentSong = newSong.songname;
-          songChannels = songSnapshot.child(currentSong).val();
-          if (myConnectionsRef === null) { // if user has been in a song and is now offline 
-            for (var i = 0; i < 4; i++) {
-              if (songChannels[i].free === newUser.userLogin[0].value) {
-                newSong.firebaseSetChannelStatus(true, i); // set channel to available
-              };
-            };
-          };
-        };
+      songFBRef.on('value', function(songSnapshot) {
+        var noNewSong = "";
+        newUser.freeUpChannel(noNewSong);
       })
     };
   });
