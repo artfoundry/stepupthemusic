@@ -24,17 +24,11 @@ User.prototype.freeUpChannel = function(newSongName) {
 
 User.prototype.updateConnectStatus = function() {
   var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + this.userLogin[0].value + '/connections');
-  var connectedRef = new Firebase('https://stepupthemusic.firebaseIO.com/.info/connected');
-  connectedRef.on('value', function(snapshot) {
-    if (snapshot.val() === true) {
-      var connectedDevice = myConnectionsRef.push(true);
-      connectedDevice.onDisconnect().remove();
-      var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
-      songFBRef.on('value', function(songSnapshot) {
-        var noNewSong = "";
-        newUser.freeUpChannel(noNewSong);
-      })
-    };
+  myConnectionsRef.push(true).onDisconnect().remove();
+  var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
+  songFBRef.on('value', function(songSnapshot) {
+    var noNewSong = "";
+    newUser.freeUpChannel(noNewSong);
   });
 };
 
