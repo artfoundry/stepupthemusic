@@ -123,9 +123,6 @@ function loadCheck(clickedSong) {
 };
 
 function loadSong(songname, songIsNew) {
-  // if (newUser.currentSong !== "") {
-  //   newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
-  // };
   newUser.freeUpChannel(songname);
   newSong = new Song();
   newSong.songname = songname;
