@@ -86,11 +86,12 @@ function Song() {
   this.tempo = 120;
   this.playOn = false;
   this.time = 0;
+  this.public = true;
 };
 
 Song.prototype.firebaseNewSong = function () {
   var publicSongListFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
-  publicSongListFBRef.child(this.songname).set({url: publicSongListFBRef.child(this.songname).toString()});
+  publicSongListFBRef.child(this.songname).set({url: publicSongListFBRef.child(this.songname).toString(), public: this.public});
   var userSongsFBRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + newUser.getUserLogin("name") + '/songs/');
   userSongsFBRef.child(this.songname).set({url: publicSongListFBRef.child(this.songname).toString()});
 };
@@ -123,6 +124,7 @@ Song.prototype.firebaseUpdateSongData = function (lastInstrument) {
 };
 
 Song.prototype.getFBSongDataWorker = function(songSnapshot) {
+  this.public = songSnapshot.child("public").val();
   for (var i = 0; i < 4; i++) {
     var instrumentValueFB = Object.keys(songSnapshot.child(i).val())[0];
     var channelDataFB = songSnapshot.child(i).val();

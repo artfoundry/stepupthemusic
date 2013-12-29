@@ -98,15 +98,17 @@ User.prototype.printSongList = function(listSelector) {
   };
   songListFBRef.on('child_added', function(songSnapshot) {
     var songName = songSnapshot.name();
+    var songIsPublic = songSnapshot.child("public").val()
     var nameNoSpaces = {};
     // add rand to prevent a name with spaces and same name w/o from having same ID
     nameNoSpaces[songName] = songName.replace(/\s+/g, "") + listAbbrev + Math.floor(Math.random() * 100000).toString();
-    // if song is not already listed in the user list, then ok to list in public list
-    $(listSelector).append("<li id='" + nameNoSpaces[songName] + "'><a href='#'>" + songName + "</a></li>");
-    $("#" + nameNoSpaces[songName]).on("click", function(event) {
-      event.preventDefault();
-      loadCheck(songName);
-    });
+    if ((listSelector === "#userSonglist") || ((listSelector === "#publicSonglist") && (songIsPublic === true))) {
+      $(listSelector).append("<li id='" + nameNoSpaces[songName] + "'><a href='#'>" + songName + "</a></li>");
+      $("#" + nameNoSpaces[songName]).on("click", function(event) {
+        event.preventDefault();
+        loadCheck(songName);
+      });
+    };
   });
 };
 

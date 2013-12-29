@@ -65,7 +65,7 @@ body {
 .songform_hidden {
   position: fixed;
   transition: .5s;
-  top: -3em;
+  top: -4em;
   margin-top: .4em;
 }
 
@@ -74,6 +74,16 @@ body {
   transition: .5s;
   top: 0;
   margin-top: .4em;
+}
+
+.songOption {
+  width: 15%;
+  margin-right: 5px;
+}
+
+.songOptionColumn {
+  height: 25px;
+  text-align: left;
 }
 
 .dropmenu {
