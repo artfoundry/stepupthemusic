@@ -45,13 +45,15 @@ function createNewSong() {
       songList = Object.keys(songsSnapshot.child("songs").val());
     };
     var publicSong = true;
-    $("#newPublic,#newPublicLabel").on("click", function(event) {
+    $("#newPublic").on("click", function(event) {
       if (publicSong === true) {
-        $("#newPublic").attr("src", "images/button_note.png");
+        $("#newPublic").removeClass("warning");
+        $("#newPublic").addClass("default");
         publicSong = false;
       }
       else {
-        $("#newPublic").attr("src", "images/button_note_on.png");
+        $("#newPublic").removeClass("default");
+        $("#newPublic").addClass("warning");
         publicSong = true;
       };
     });
@@ -72,6 +74,8 @@ function toggleCreateForm() {
     $("#createsong").attr("src", "images/button_create_on.png");
     $("#songformdiv").removeClass("songform_hidden");
     $("#songformdiv").addClass("songform_slide");
+    $("#newPublic").removeClass("default");
+    $("#newPublic").addClass("warning");
     $("#songname").val("");
   }
   else {
