@@ -44,13 +44,26 @@ function createNewSong() {
     if (songsSnapshot.hasChild('songs')) {
       songList = Object.keys(songsSnapshot.child("songs").val());
     };
+    var publicSong = true;
+    $("#newPublic").on("click", function(event) {
+      if (publicSong === true) {
+        $("#newPublic").removeClass("warning");
+        $("#newPublic").addClass("default");
+        publicSong = false;
+      }
+      else {
+        $("#newPublic").removeClass("default");
+        $("#newPublic").addClass("warning");
+        publicSong = true;
+      };
+    });
     $("#songformdiv").on("submit", "#songform", function(event){
       event.preventDefault();
       var newSongName = $(this).serializeArray();
       newSongName = checkName(newSongName[0].value, songList);
       if (newSongName !== "") {
         var songIsNew = true;
-        loadSong(newSongName, songIsNew);
+        loadSong(newSongName, songIsNew, publicSong);
       }
     });
   });
@@ -61,6 +74,8 @@ function toggleCreateForm() {
     $("#createsong").attr("src", "images/button_create_on.png");
     $("#songformdiv").removeClass("songform_hidden");
     $("#songformdiv").addClass("songform_slide");
+    $("#newPublic").removeClass("default");
+    $("#newPublic").addClass("warning");
     $("#songname").val("");
   }
   else {
@@ -122,10 +137,11 @@ function loadCheck(clickedSong) {
   };
 };
 
-function loadSong(songname, songIsNew) {
+function loadSong(songname, songIsNew, publicSong) {
   newUser.freeUpChannel(songname);
   newSong = new Song();
   newSong.songname = songname;
+  newSong.public = publicSong;
   newUser.currentSong = songname;
   newSong.initNotes();
   if (songIsNew) {

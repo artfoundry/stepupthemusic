@@ -57,7 +57,7 @@ body {
 }
 
 #songbuttondiv {
-  width: 30em;
+  width: 32em;
   max-height: 2em;
   padding-left: 1em;
 }
@@ -65,7 +65,8 @@ body {
 .songform_hidden {
   position: fixed;
   transition: .5s;
-  top: -3em;
+  top: -4em;
+  margin-left: 7em;
   margin-top: .4em;
 }
 
@@ -73,7 +74,22 @@ body {
   position: fixed;
   transition: .5s;
   top: 0;
+  margin-left: 7em;
   margin-top: .4em;
+}
+
+#newPublic {
+  width: 4.5em;
+}
+
+.songOption {
+  width: 15%;
+  margin-right: 5px;
+}
+
+.songOptionColumn {
+  height: 25px;
+  text-align: left;
 }
 
 .dropmenu {
