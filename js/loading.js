@@ -57,9 +57,9 @@ function createNewSong() {
         publicSong = true;
       };
     });
-    $("#songformdiv").on("submit", "#songform", function(event){
+    $("#submitsongform").on("click", function(event){
       event.preventDefault();
-      var newSongName = $(this).serializeArray();
+      var newSongName = $("#songname").serializeArray();
       newSongName = checkName(newSongName[0].value, songList);
       if (newSongName !== "") {
         var songIsNew = true;
