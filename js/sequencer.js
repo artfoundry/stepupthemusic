@@ -163,7 +163,7 @@ Song.prototype.updateGrid = function() {
     var username = "";
     for (var i = 0; i < 4; i++) {
       username = songSnapshot.child(i).child("free").val()
-      username !== true ? $("#user" + (i + 1)).html(username) : $("#user" + (i + 1)).html("Empty");
+      username !== true ? $("#user" + (i + 1)).html(username) : $("#user" + (i + 1)).html("Available");
     };
   });
   $("#i" + this.currentInstrument).attr("src", "images/button_instr_i" + this.currentInstrument + "_on.png");

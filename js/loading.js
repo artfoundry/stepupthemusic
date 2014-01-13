@@ -13,6 +13,7 @@ function initSequencer() {
                   "synth_bass_2"
                   ],
     callback: function() {
+      ColorSphereBackground();
       newUser = new User;
       $("#login").toggle();
       newUser.verifyLogin();
@@ -82,7 +83,7 @@ function toggleCreateForm() {
     $("#createsong").attr("src", "images/button_create.png");
     $("#songformdiv").removeClass("songform_slide"); 
     $("#songformdiv").addClass("songform_hidden");
-    $("#songformdiv").off("submit");
+    $("#submitsongform").off("click");
   };
 
 };
@@ -96,7 +97,6 @@ function updateUIafterLogin() {
     toggleCreateForm();
     createNewSong();
   });
-  ColorSphereBackground();
 };
 
 function isConnected(username) {
