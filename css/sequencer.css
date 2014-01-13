@@ -50,11 +50,13 @@ body {
   width: 120px;
 }
 
+/* for Firefox only */
 @-moz-document url-prefix() {
   #createsong {
     margin-top: -30px;  
   }
 }
+
 
 #songbuttondiv {
   width: 32em;
