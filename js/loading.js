@@ -13,7 +13,6 @@ function initSequencer() {
                   "synth_bass_2"
                   ],
     callback: function() {
-      ColorSphereBackground();
       newUser = new User;
       $("#login").toggle();
       newUser.verifyLogin();

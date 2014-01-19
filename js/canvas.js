@@ -1,10 +1,8 @@
 /////// SPHERE ///////
 
 Event.add(window, "load", function(event) {
-
   ColorSphereBackground();
 });
-
 
 var ColorSphereBackground = function() {
   var d = document;
@@ -14,7 +12,7 @@ var ColorSphereBackground = function() {
   canvas.style.width = window.innerWidth + "px";
   canvas.style.height = window.innerHeight + "px";
   document.body.appendChild(canvas);
-  //
+
   Event.add(window, "resize", function() {
     canvas.style.width = window.innerWidth + "px";
     canvas.style.height = window.innerHeight + "px";
@@ -29,6 +27,7 @@ var ColorSphereBackground = function() {
   var theSphere;
   var px = window.innerWidth / 2;
   var py = window.innerHeight / 2;
+
   var onMouseMove = function(event) {
     ctx.drawImage(theSphere, 0, 0);
     if (event) {
@@ -37,10 +36,9 @@ var ColorSphereBackground = function() {
       coords.y -= document.body.scrollTop;
       px = coords.x;
       py = coords.y;
-    } else { // 
+    } else {
       var coords = { x: px, y: py };
     }
-    //
     var x = (coords.x / window.innerWidth) * 255 - 127; // grab mouse pixel coords, center at midpoint
     var y = (coords.y / window.innerHeight) * 255 - 127;
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height); // get image data
@@ -53,7 +51,7 @@ var ColorSphereBackground = function() {
     ctx.putImageData(imageData, 0, 0);
   };
   Event.add(d, "mousemove", onMouseMove);
-  //
+
   function sphere(top) { // create Sphere image, and apply to <canvas>
     var canvas1 = document.createElement("canvas");
     var ctx = canvas1.getContext("2d");
@@ -83,7 +81,7 @@ var ColorSphereBackground = function() {
     }
     return canvas1;
   };
-  //
+
   var percent = 1 - document.body.scrollTop / document.body.scrollHeight;
   ctx.drawImage(theSphere = sphere(percent), 0, 0)
 };
