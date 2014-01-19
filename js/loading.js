@@ -138,6 +138,10 @@ function loadCheck(clickedSong) {
 };
 
 function loadSong(songname, songIsNew, publicSong) {
+  if (newSong.playOn === true) {
+    newSong.playbackControl();
+    newSong.allNotesOff();
+  };
   newUser.freeUpChannel(songname);
   newSong = new Song();
   newSong.songname = songname;

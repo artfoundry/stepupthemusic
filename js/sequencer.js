@@ -177,29 +177,34 @@ Song.prototype.updateGrid = function() {
   };
 };
 
+Song.prototype.playbackControl = function() {
+  if (this.playOn === false){
+    $("#play").attr("src", "images/button_play_on.png");
+    this.playOn = true;
+    var thisSong = this;
+    playSeq = setInterval(function() {
+      thisSong.firebaseGetSongData();
+      thisSong.playNotes(thisSong.time);
+      if (thisSong.time === (thisSong.allNotesInSeq - thisSong.totalOctaveNotes)){ // if at the last note
+        thisSong.time = 0;  //loop the sequence
+      }
+      else {
+        thisSong.time += thisSong.totalOctaveNotes;
+      };
+    }, calcDelay(this.tempo)); // sets the tempo for the song as part of setInterval
+  }
+  else {
+    this.clearButtons("#play");
+    this.playOn = false;
+    clearInterval(playSeq);
+  };
+};
+
 Song.prototype.addListeners = function() {
   var songInfo = this;
   $("#controls").click(function(event) {
     if (event.target.id === "play"){
-      if (songInfo.playOn === false) {
-        $("#play").attr("src", "images/button_play_on.png");
-        songInfo.playOn = true;
-        playSeq = setInterval(function() {
-          songInfo.firebaseGetSongData();
-          songInfo.playNotes(songInfo.time);
-          if (songInfo.time === (songInfo.allNotesInSeq - songInfo.totalOctaveNotes)){
-            songInfo.time = 0;  //loop the sequence
-          }
-          else {
-            songInfo.time += songInfo.totalOctaveNotes;
-          };
-        }, calcDelay(songInfo.tempo)); // sets the tempo for the song as part of setInterval
-      }
-      else {
-        songInfo.clearButtons("#play");
-        songInfo.playOn = false;
-        clearInterval(playSeq);
-      };
+      songInfo.playbackControl();
     }
     else if ($(event.target).hasClass("channel")) {
       songInfo.clearButtons(".channel");
@@ -319,21 +324,35 @@ Song.prototype.highlight = function(selectorId) {
   }, 500);
 };
 
+Song.prototype.allNotesOff = function() {
+  var delay = 0; // stop the note immediately
+  var note = 0;
+  var instrument = "0";
+  for (var i = 0; i < this.totalOctaveNotes; i++) { 
+    for (var c = 0; c < 4; c++) {
+      instrument = Object.keys(this.sequences[c]);
+      if (this.sequences[c][instrument][i + this.time] > -1) { // turn off if selected/on
+        note = this.sequences[c][instrument][i + this.time];
+        MIDI.noteOff(c, note, delay);  // turn the note off
+      };
+    };
+  };
+};
+
 Song.prototype.playNotes = function(time) {
   var delay = 0; // play one note every quarter second
   var velocity = 127; // how hard the note hits
   var note = 0;
   var instrument = "0";
   MIDI.setVolume(0, 127);
-  for (var i = 0; i < 4; i++) {
-    instrument = Object.keys(this.sequences[i]);
-    MIDI.programChange(i, instrument); //channel, program
-  };
+
   var markerId = (this.time / this.totalOctaveNotes).toString();
   this.highlight("m" + markerId);
+
   for (var i = 0; i < this.totalOctaveNotes; i++) { 
     for (var c = 0; c < 4; c++) {
       instrument = Object.keys(this.sequences[c]);
+      MIDI.programChange(c, instrument);
       if (this.sequences[c][instrument][i + this.time] > -1) { // play if the note is selected/on
         note = this.sequences[c][instrument][i + this.time];
         MIDI.noteOn(c, note, velocity, delay);  // play the note
