@@ -47,13 +47,26 @@ function createNewSong() {
     if (songsSnapshot.hasChild('songs')) {
       songList = Object.keys(songsSnapshot.child("songs").val());
     };
-    $("#songformdiv").on("submit", "#songform", function(event){
+    var publicSong = true;
+    $("#newPublic").on("click", function(event) {
+      if (publicSong === true) {
+        $("#newPublic").removeClass("warning");
+        $("#newPublic").addClass("default");
+        publicSong = false;
+      }
+      else {
+        $("#newPublic").removeClass("default");
+        $("#newPublic").addClass("warning");
+        publicSong = true;
+      };
+    });
+    $("#submitsongform").on("click", function(event){
       event.preventDefault();
-      var newSongName = $(this).serializeArray();
+      var newSongName = $("#songname").serializeArray();
       newSongName = checkName(newSongName[0].value, songList);
       if (newSongName !== "") {
         var songIsNew = true;
-        loadSong(newSongName, songIsNew);
+        loadSong(newSongName, songIsNew, publicSong);
       }
     });
   });
@@ -64,13 +77,15 @@ function toggleCreateForm() {
     $("#createsong").attr("src", "images/button_create_on.png");
     $("#songformdiv").removeClass("songform_hidden");
     $("#songformdiv").addClass("songform_slide");
+    $("#newPublic").removeClass("default");
+    $("#newPublic").addClass("warning");
     $("#songname").val("");
   }
   else {
     $("#createsong").attr("src", "images/button_create.png");
     $("#songformdiv").removeClass("songform_slide"); 
     $("#songformdiv").addClass("songform_hidden");
-    $("#songformdiv").off("submit");
+    $("#submitsongform").off("click");
   };
 
 };
@@ -81,11 +96,9 @@ function updateUIafterLogin() {
   newUser.listUserSongs();
   newUser.listAllSongs();
   $("#createsong").on("click", function(){
-    event.preventDefault();
     toggleCreateForm();
     createNewSong();
   });
-  ColorSphereBackground();
 };
 
 function isConnected(username) {
@@ -101,34 +114,19 @@ function isConnected(username) {
 
 function freeChannelExists(songName) {
   var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/' + songName + '/');
-  var isFree = false;
+  var channelIsFree = false;
   songFBRef.once('value', function(songSnapshot) {
     var channels = songSnapshot.val();
     var i = 0;
-    var channelStatus = "";
-    var myConnectionsRef = {};
     while (i < 4) {
-      channelStatus = channels[i].free;
-      myConnectionsRef = new Firebase('https://stepupthemusic.firebaseio.com/users/' + channelStatus + '/connections');
-      if (channelStatus === true) {
-        isFree = true;
-      }
-      else if (channelStatus === newUser.userLogin[0].value) { // if user listed as occuping the channel...
-        if (myConnectionsRef !== null) { // ...is connected and trying to get into the song...
-          songFBRef.child(i).update({free: true}); // ...set channel to available
-          isFree = true;
-        };
-      }
-      else if (channelStatus !== newUser.userLogin[0].value) { // if user is not the current user
-        if (myConnectionsRef === null) { // ...and is not connected
-          songFBRef.child(i).update({free: true}); // ...set channel to available
-          isFree = true;
-        };
+      if (channels[i].free === true) {
+        channelIsFree = true;
+        i = 4;
       };
       i++;
     };
   });
-  return isFree;
+  return channelIsFree;
 };
 
 function loadCheck(clickedSong) {
@@ -141,12 +139,15 @@ function loadCheck(clickedSong) {
   };
 };
 
-function loadSong(songname, songIsNew) {
-  if (newUser.currentSong !== "") {
-    newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
+function loadSong(songname, songIsNew, publicSong) {
+  if (newSong.playOn === true) {
+    newSong.playbackControl();
+    newSong.allNotesOff();
   };
+  newUser.freeUpChannel(songname);
   newSong = new Song();
   newSong.songname = songname;
+  newSong.public = publicSong;
   newUser.currentSong = songname;
   newSong.initNotes();
   if (songIsNew) {

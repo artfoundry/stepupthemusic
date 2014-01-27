@@ -1,12 +1,30 @@
 body {
   background-color: #3a25be;
-  /*background-image: url("../images/background.jpg");*/
+  background-image: url("../images/background.jpg");
   background-position: center;
   line-height: 1.6;
   font-size: 100%;
   margin: 0 0 0 0;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+#logo {
+  width: 30%;
+  margin-top: .7em;
+}
+
+#biglogo {
+  width: 80%;
+}
+
+#loadMessage {
+  margin-top: 20em;
+  text-align: center;
+}
+
+#loading {
+  color: black;
 }
 
 #canvasSection { 
@@ -32,8 +50,16 @@ body {
   width: 120px;
 }
 
+/* for Firefox only */
+@-moz-document url-prefix() {
+  #createsong {
+    margin-top: -30px;  
+  }
+}
+
+
 #songbuttondiv {
-  width: 30em;
+  width: 32em;
   max-height: 2em;
   padding-left: 1em;
 }
@@ -41,7 +67,8 @@ body {
 .songform_hidden {
   position: fixed;
   transition: .5s;
-  top: -3em;
+  top: -4em;
+  margin-left: 7em;
   margin-top: .4em;
 }
 
@@ -49,7 +76,22 @@ body {
   position: fixed;
   transition: .5s;
   top: 0;
+  margin-left: 7em;
   margin-top: .4em;
+}
+
+#newPublic {
+  width: 4.5em;
+}
+
+.songOption {
+  width: 15%;
+  margin-right: 5px;
+}
+
+.songOptionColumn {
+  height: 25px;
+  text-align: left;
 }
 
 .dropmenu {
@@ -96,7 +138,7 @@ body {
   height: 50px;
 }
 
-.instrument:hover, .channel:hover, #play:hover, .note:hover, #createsong:hover  {
+.instrument:hover, .channel:hover, #play:hover, .note:hover, #createsong:hover, #create  {
   cursor: pointer;
 }
 
@@ -104,7 +146,7 @@ body {
   background-color: #3e74be;
   opacity: .8;
   width: 40em;
-  height: 20em;
+  height: 23em;
   border-style: solid;
   border-width: 1px;
   border-radius: 10px;

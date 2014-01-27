@@ -12,28 +12,23 @@ User.prototype.getUserLogin = function(request) {
   };
 };
 
+User.prototype.freeUpChannel = function(newSongName) {
+  if (this.currentSong !== ""){ // if user has already been in a channel
+    if (newSongName !== "") {
+      newSong.firebaseSetChannelStatus(true, newSong.channel);  // free up channel being left
+    };
+    var userSongFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/' + this.currentSong + '/' + newSong.channel + '/free');
+    userSongFBRef.onDisconnect().set(true); // set channel to available
+  };
+};
+
 User.prototype.updateConnectStatus = function() {
   var myConnectionsRef = new Firebase('https://stepupthemusic.firebaseIO.com/users/' + this.userLogin[0].value + '/connections');
-  var connectedRef = new Firebase('https://stepupthemusic.firebaseIO.com/.info/connected');
-  connectedRef.on('value', function(snapshot) {
-    if (snapshot.val() === true) {
-      var connectedDevice = myConnectionsRef.push(true);
-      connectedDevice.onDisconnect().remove();
-      var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
-      songFBRef.once('value', function(songSnapshot) {
-        if (newSong.songname !== "") {
-          var currentSong = newSong.songname;
-          songChannels = songSnapshot.child(currentSong).val();
-          if (myConnectionsRef === null) { // if user has been in a song and is now offline 
-            for (var i = 0; i < 4; i++) {
-              if (songChannels[i].free === newUser.userLogin[0].value) {
-                newSong.firebaseSetChannelStatus(true, i); // set channel to available
-              };
-            };
-          };
-        };
-      })
-    };
+  myConnectionsRef.push(true).onDisconnect().remove();
+  var songFBRef = new Firebase('https://stepupthemusic.firebaseio.com/songs/');
+  songFBRef.on('value', function(songSnapshot) {
+    var noNewSong = "";
+    newUser.freeUpChannel(noNewSong);
   });
 };
 
@@ -103,15 +98,17 @@ User.prototype.printSongList = function(listSelector) {
   };
   songListFBRef.on('child_added', function(songSnapshot) {
     var songName = songSnapshot.name();
+    var songIsPublic = songSnapshot.child("public").val()
     var nameNoSpaces = {};
     // add rand to prevent a name with spaces and same name w/o from having same ID
     nameNoSpaces[songName] = songName.replace(/\s+/g, "") + listAbbrev + Math.floor(Math.random() * 100000).toString();
-    // if song is not already listed in the user list, then ok to list in public list
-    $(listSelector).append("<li id='" + nameNoSpaces[songName] + "'><a href='#'>" + songName + "</a></li>");
-    $("#" + nameNoSpaces[songName]).on("click", function(event) {
-      event.preventDefault();
-      loadCheck(songName);
-    });
+    if ((listSelector === "#userSonglist") || ((listSelector === "#publicSonglist") && (songIsPublic === true))) {
+      $(listSelector).append("<li id='" + nameNoSpaces[songName] + "'><a href='#'>" + songName + "</a></li>");
+      $("#" + nameNoSpaces[songName]).on("click", function(event) {
+        event.preventDefault();
+        loadCheck(songName);
+      });
+    };
   });
 };
 
