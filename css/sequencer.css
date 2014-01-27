@@ -1,6 +1,6 @@
 body {
   background-color: #3a25be;
-  /*background-image: url("../images/background.jpg");*/
+  background-image: url("../images/background.jpg");
   background-position: center;
   line-height: 1.6;
   font-size: 100%;
@@ -151,7 +151,7 @@ body {
   border-width: 1px;
   border-radius: 10px;
   border-color: #3a25be;
-  margin: 15em auto auto auto;
+  margin: 10em auto auto auto;
   text-align: center;
 }
 
@@ -179,4 +179,18 @@ body {
 
 .musician {
   margin-top: .2em;
+}
+
+#logo {
+  width: 30%;
+  margin-top: .7em;
+}
+
+#biglogo {
+  width: 80%;
+}
+
+#loadMessage {
+  margin-top: 10em;
+  text-align: center;
 }
