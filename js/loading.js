@@ -1,5 +1,7 @@
-$(document).ready(function(){
+Event.add(window, "load", function(event) {
+  MIDI.loader = new widgets.Loader;
   initSequencer();
+  ColorSphereBackground();
 });
 
 function initSequencer() {
@@ -13,6 +15,7 @@ function initSequencer() {
                   "synth_bass_2"
                   ],
     callback: function() {
+      MIDI.loader.stop();
       newUser = new User;
       $("#login").toggle();
       newUser.verifyLogin();

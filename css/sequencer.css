@@ -109,7 +109,7 @@ body {
   border-width: 1px;
   border-radius: 10px;
   border-color: #3a25be;
-  margin: 15em auto auto auto;
+  margin: 10em auto auto auto;
   text-align: center;
 }
 
@@ -150,6 +150,6 @@ body {
 }
 
 #loadMessage {
-  margin-top: 20em;
+  margin-top: 10em;
   text-align: center;
 }

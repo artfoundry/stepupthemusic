@@ -1,11 +1,5 @@
 /////// SPHERE ///////
 
-Event.add(window, "load", function(event) {
-
-  ColorSphereBackground();
-});
-
-
 var ColorSphereBackground = function() {
   var d = document;
   var canvas = document.getElementById("canvasSection");
