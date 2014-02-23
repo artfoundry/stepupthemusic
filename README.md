@@ -13,9 +13,9 @@ Technology
 =========
 Hosted at http://www.lcddreams.com/stepupthemusic
 
-Firebase is being used for the asynchronous/synchronous communication between users and DB storage of songs and users.
+Firebase is being used for the asynchronous/synchronous communication between users as well as DB storage of songs and users.
 
-Midi.js (http://mudcu.be/midi-js/) is being used for the music sequencing and playback using the MIDI library.  Also used to create the GM sound files as well as the canvas dynamic color background.
+Midi.js (http://mudcu.be/midi-js/) is being used for the music sequencing and playback using the MIDI library.  Also used to create the GM sound files as well as the canvas dynamic color background and loader graphic.
 
 Gumby CSS Framework used for grid layout, menu bar, and forms.
 
