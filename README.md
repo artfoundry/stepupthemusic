@@ -11,7 +11,7 @@ Each user controls a single instrument but is able to hear all instruments playe
 
 Technology
 =========
-Hosted at lcddreams.com/stepupthemusic
+Hosted at http://www.lcddreams.com/stepupthemusic
 
 Firebase is being used for the asynchronous/synchronous communication between users and DB storage of songs and users.
 
