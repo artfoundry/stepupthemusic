@@ -23,7 +23,6 @@ Using Jquery 1.10.2.
 
 Future Updates
 =========
-Ability to set a song as public or private (private songs would not be listed in the All Songs list).  
 Ability to change tempo.  
 Minor key setting available (currently scale is in G major).  
 Button to clear the grid of all note settings.  
