@@ -1,196 +1,197 @@
 body {
-  background-color: #3a25be;
-  background-image: url("../images/background.jpg");
-  background-position: center;
-  line-height: 1.6;
-  font-size: 100%;
-  margin: 0 0 0 0;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+    background-color: #3a25be;
+    background-image: url("../images/background.jpg");
+    background-position: center;
+    line-height: 1.6;
+    font-size: 100%;
+    margin: 0 0 0 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 #logo {
-  width: 30%;
-  margin-top: .7em;
+    width: 30%;
+    margin-top: .7em;
 }
 
 #biglogo {
-  width: 80%;
+    width: 80%;
 }
 
 #loadMessage {
-  margin-top: 20em;
-  text-align: center;
+    margin-top: 20em;
+    text-align: center;
 }
 
 #loading {
-  color: black;
+    color: black;
 }
 
-#canvasSection { 
-  position:fixed;
-  z-index: -1;
+#canvasSection {
+    position:fixed;
+    z-index: -1;
 }
 
 .navbar {
-  max-height: 61px;
+    max-height: 61px;
 }
 
 .navstyle {
-  background-color: #3e74be;
-  opacity: .8;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 0 0 10px 10px;
-  border-color: #3a25be;
-  width: 70em;
+    background-color: #3e74be;
+    opacity: .8;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0 0 10px 10px;
+    border-color: #3a25be;
+    width: 70em;
 }
 
 #createsong {
-  width: 120px;
+    width: 120px;
+    float: left;
 }
 
 /* for Firefox only */
 @-moz-document url-prefix() {
-  #createsong {
-    margin-top: -30px;  
-  }
+    #createsong {
+        margin-top: -30px;
+    }
 }
 
 
 #songbuttondiv {
-  width: 32em;
-  max-height: 2em;
-  padding-left: 1em;
+    width: 32em;
+    max-height: 2em;
+    padding-left: 1em;
 }
 
 .songform_hidden {
-  position: fixed;
-  transition: .5s;
-  top: -4em;
-  margin-left: 7em;
-  margin-top: .4em;
+    position: fixed;
+    transition: .5s;
+    top: -4em;
+    margin-left: 7em;
+    margin-top: .4em;
 }
 
 .songform_slide {
-  position: fixed;
-  transition: .5s;
-  top: 0;
-  margin-left: 7em;
-  margin-top: .4em;
+    position: fixed;
+    transition: .5s;
+    top: 0;
+    margin-left: 7em;
+    margin-top: .4em;
 }
 
 #newPublic {
-  width: 4.5em;
+    width: 4.5em;
 }
 
 .songOption {
-  width: 15%;
-  margin-right: 5px;
+    width: 15%;
+    margin-right: 5px;
 }
 
 .songOptionColumn {
-  height: 25px;
-  text-align: left;
+    height: 25px;
+    text-align: left;
 }
 
 .dropmenu {
-  overflow: auto;
+    overflow: auto;
 }
 
 .note {
-  width: 33px;
-  height: 33px;
-  margin: 1px;
-  padding: 0;
-  background-color: transparent;
+    width: 33px;
+    height: 33px;
+    margin: 1px;
+    padding: 0;
+    background-color: transparent;
 }
 
 .marker {
-  width: 17px;
-  height: 30px;  
-  margin-left: .6em;
-  padding: 0;
+    width: 17px;
+    height: 30px;
+    margin-left: .6em;
+    padding: 0;
 }
 
 .markerimg {
-  width: 100%;
-  height: 70%;
+    width: 100%;
+    height: 70%;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
 #play {
-  width: 140px;
+    width: 140px;
 }
 
 .channel {
-  width: 45px;
+    width: 45px;
 }
 
 .instrDiv {
-  width: 150px;
+    width: 150px;
 }
 
 .instrument {
-  height: 50px;
+    height: 50px;
 }
 
 .instrument:hover, .channel:hover, #play:hover, .note:hover, #createsong:hover, #create  {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 #login {
-  background-color: #3e74be;
-  opacity: .8;
-  width: 40em;
-  height: 23em;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 10px;
-  border-color: #3a25be;
-  margin: 10em auto auto auto;
-  text-align: center;
+    background-color: #3e74be;
+    opacity: .8;
+    width: 40em;
+    height: 23em;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color: #3a25be;
+    margin: 10em auto auto auto;
+    text-align: center;
 }
 
 #controlPanel {
-  max-height: 43em;
-  max-width: 11.5em;
-  background-color: #3e74be;
-  opacity: .8;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 10px;
-  border-color: #3a25be;  
-  padding: .5em 1em .5em 1em;
-  text-align: center;
+    max-height: 43em;
+    max-width: 11.5em;
+    background-color: #3e74be;
+    opacity: .8;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color: #3a25be;
+    padding: .5em 1em .5em 1em;
+    text-align: center;
 }
 
 .panelHeaders {
-  color: black;
+    color: black;
 }
 
 #trackinfo {
-  text-align: left;
-  color: white;
+    text-align: left;
+    color: white;
 }
 
 .musician {
-  margin-top: .2em;
+    margin-top: .2em;
 }
 
 #logo {
-  width: 30%;
-  margin-top: .7em;
+    width: 30%;
+    margin-top: .7em;
 }
 
 #biglogo {
-  width: 80%;
+    width: 80%;
 }
 
 #loadMessage {
-  margin-top: 10em;
-  text-align: center;
+    margin-top: 10em;
+    text-align: center;
 }
