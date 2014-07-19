@@ -40,7 +40,7 @@ function printTitle(songname) {
   var songArray = songname.toLowerCase().split("");
   $("#title").html("");
   $.each(songArray, function(index, value) {
-    $("#title").append("<img src='images/letter_" + value + ".png'>");
+    $("#title").append("<img src='images/letter_" + value + ".png' alt='Song title letter' />");
   });
 };
 
@@ -62,7 +62,7 @@ function initGrid(songInfo) {
         image = "images/button_note.png";
       }
       grid += "<div class='one columns'>";
-      grid += "<a href='#'><img class='note' id='" + buttonId + "' src='" + image + "' gumby-retina></a>";
+      grid += "<a href='#'><img class='note' id='" + buttonId + "' src='" + image + "' gumby-retina alt='Note' /></a>";
       grid += "</div>";
     };
     grid += "</div></div>";
