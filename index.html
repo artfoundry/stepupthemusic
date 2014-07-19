@@ -1,215 +1,219 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Step Up The Music!</title>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  
-  <!-- <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> -->
+    <title>Step Up The Music!</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-  <!-- Gumby css -->
-  <link href="css/gumby.css" rel="stylesheet" type="text/css" />
-  <!-- Sequencer css -->
-  <link href="css/sequencer.css" rel="stylesheet" type="text/css" />
+    <!-- <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> -->
 
-  <!-- jquery -->
-  <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
-  <!-- Firebase -->  
-  <script src="js/firebase.js" type="text/javascript"></script>
-  <!-- Gumby js -->
-  <script src="js/libs/modernizr-2.6.2.min.js" type="text/javascript"></script>
-  <script gumby-touch="js/libs" src="js/libs/gumby.js"></script>
-  <script src="js/libs/ui/gumby.toggleswitch.js"></script>
-  <script src="js/libs/ui/gumby.navbar.js"></script>
-  <script src="js/libs/gumby.init.js"></script>
-  <!-- midi.js package -->
-  <script src="js/MIDI/AudioDetect.js" type="text/javascript"></script>
-  <script src="js/MIDI/LoadPlugin.js" type="text/javascript"></script>
-  <script src="js/MIDI/Plugin.js" type="text/javascript"></script>
-  <script src="js/MIDI/Player.js" type="text/javascript"></script>
-  <script src="js/Widgets/Loader.js" type="text/javascript"></script>
-  <script src="js/Window/Event.js" type="text/javascript"></script>
-  <script src="js/Window/DOMLoader.XMLHttp.js" type="text/javascript"></script>
-  <script src="js/Window/DOMLoader.script.js" type="text/javascript"></script>
-  <!-- extras -->
-  <script src="inc/Base64.js" type="text/javascript"></script>
-  <script src="inc/base64binary.js" type="text/javascript"></script>
-  <!-- sequencer -->
-  <script src="js/loading.js" type="text/javascript"></script>
-  <script src="js/user.js" type="text/javascript"></script>
-  <script src="js/sequencer.js" type="text/javascript"></script>
-  <script src="js/canvas.js" type="text/javascript"></script>
+    <!-- Gumby css -->
+    <link href="css/gumby.css" rel="stylesheet" type="text/css" />
+    <!-- Sequencer css -->
+    <link href="css/sequencer.css" rel="stylesheet" type="text/css" />
+
+    <!-- jquery -->
+    <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
+    <!-- Firebase -->
+    <script src="js/firebase.js" type="text/javascript"></script>
+    <!-- Gumby js -->
+    <script src="js/libs/modernizr-2.6.2.min.js" type="text/javascript"></script>
+    <script gumby-touch="js/libs" src="js/libs/gumby.js"></script>
+    <script src="js/libs/ui/gumby.toggleswitch.js"></script>
+    <script src="js/libs/ui/gumby.navbar.js"></script>
+    <script src="js/libs/gumby.init.js"></script>
+    <!-- midi.js package -->
+    <script src="js/MIDI/AudioDetect.js" type="text/javascript"></script>
+    <script src="js/MIDI/LoadPlugin.js" type="text/javascript"></script>
+    <script src="js/MIDI/Plugin.js" type="text/javascript"></script>
+    <script src="js/MIDI/Player.js" type="text/javascript"></script>
+    <script src="js/Widgets/Loader.js" type="text/javascript"></script>
+    <script src="js/Window/Event.js" type="text/javascript"></script>
+    <script src="js/Window/DOMLoader.XMLHttp.js" type="text/javascript"></script>
+    <script src="js/Window/DOMLoader.script.js" type="text/javascript"></script>
+    <!-- extras -->
+    <script src="inc/Base64.js" type="text/javascript"></script>
+    <script src="inc/base64binary.js" type="text/javascript"></script>
+    <!-- sequencer -->
+    <script src="js/loading.js" type="text/javascript"></script>
+    <script src="js/user.js" type="text/javascript"></script>
+    <script src="js/sequencer.js" type="text/javascript"></script>
+    <script src="js/canvas.js" type="text/javascript"></script>
 
 
 </head>
 <body>
 <canvas id="canvasSection">Sorry, canvas is not supported in your browser, so you will not be able to see the dynamic colored background.</canvas>
 
-  <div id="loadMessage">
-    <img src="images/logo.png" />
-  </div>  
+<div id="loadMessage">
+    <img src="images/logo.png" alt="LCDDreams big logo" />
+</div>
 
-  <div id="login" class="hidden">
-    <a href="http://www.lcddreams.com/"><img src="images/lcddreams_logo_transparent_sml.png" /></a><br>
+<div id="login" class="hidden">
+    <a href="http://www.lcddreams.com/"><img src="images/lcddreams_logo_transparent_sml.png" alt="LCDDreams small logo" /></a><br>
     presents<br>
-    <img id="biglogo" src="images/logo.png" />
+    <img id="biglogo" src="images/logo.png" alt="LCDDreams big logo" />
     <h5>Please create an account/login so you can save your songs</h5>
     <br>
-    <form action="" id="loginform">
-      <ul>
+    <form action="#" id="loginform">
         <div class="row">
-          <div class="centered ten columns">      
-            <li class="prepend append field">
-              <input class="narrow text input" id="username" type="text" name="username" placeholder="Username" />
-              <input class="narrow text input" id="pw" type="password" name="password" placeholder="Password" />
-              <div class="medium primary btn"><input type="submit" value="Login" /></div>
-            </li>
-          </div>
-        </div>
-        <div class="row">
-          <div class="centered eight columns">
-            <li class="field">
-              <img src="images/button_createAcct.png" id="create" style="text-align: center; width: 180px;"/>
-            </li>
-          </div>
-        </div>
-      </ul>
-    </form>
-  </div>
-
-  <!-- Navbar -->
-  <div id="navbar" class="hidden">
-    <div class="row navbar navstyle" id="nav1">
-      <!-- Toggle for mobile navigation, targeting the <ul> -->
-      <a class="toggle" gumby-trigger="#nav1 > ul" href="#"><i class="icon-menu"></i></a>
-      <div class="four columns" id="logo">
-          <img src="images/logo.png" />
-      </div>
-      <ul class="six columns">
-        <li>
-          <a href="#">Your Songs</a>
-          <div class="dropdown" style="max-width: 20%;">
-            <ul class="dropmenu" id="userSonglist">
-
-            </ul>
-          </div>
-        </li>
-        <li>
-          <a href="#">All Songs</a>
-          <div class="dropdown" style="max-width: 20%;">
-            <ul class="dropmenu" id="publicSonglist">
-
-            </ul>
-          </div>
-        </li>
-        <div class="row">
-          <div class="ten columns" id="songbuttondiv">
-            <img id="createsong" src="images/button_create.png" />
-            <div class="songform_hidden" id="songformdiv">
-              <ul>
-                <li class="append field">
-                  <input class="normal narrow text input" id="songname" type="text" name="songname" placeholder="Song name" />
-                  <div class="medium warning btn" id="newPublic"><button title="On (default) to display in both lists, off to display only on your list">Public</button></div>
-                  <div class="medium primary btn"><button id="submitsongform">Create</button></div>
-                </li>
-              </ul>
+            <div class="centered ten columns">
+                <ul>
+                    <li class="prepend append field">
+                        <input class="narrow text input" id="username" type="text" name="username" placeholder="Username" />
+                        <input class="narrow text input" id="pw" type="password" name="password" placeholder="Password" />
+                        <div class="medium primary btn"><input type="submit" value="Login" /></div>
+                    </li>
+                </ul>
             </div>
-          </div>
         </div>
-      </ul>
-    </div>
-  </div>  <!-- End Navbar -->
+        <div class="row">
+            <div class="centered eight columns">
+                <ul>
+                    <li class="field">
+                        <img src="images/button_createAcct.png" id="create" style="text-align: center; width: 180px;" alt="Create account" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
 
-  <!-- Controls -->
-  <div id="controls" class="hidden">
+<!-- Navbar -->
+<div id="navbar" class="hidden">
+    <div class="row navbar navstyle" id="nav1">
+        <!-- Toggle for mobile navigation, targeting the <ul> -->
+        <a class="toggle" data-trigger="#nav1 > ul" href="#"><i class="icon-menu"></i></a>
+        <div class="four columns" id="logo">
+            <img src="images/logo.png" alt="LCDDreams logo" />
+        </div>
+        <ul class="six columns">
+            <li>
+                <a href="#">Your Songs</a>
+                <div class="dropdown" style="max-width: 20%;">
+                    <ul class="dropmenu" id="userSonglist">
+
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="#">All Songs</a>
+                <div class="dropdown" style="max-width: 20%;">
+                    <ul class="dropmenu" id="publicSonglist">
+
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <div class="row">
+                    <div class="ten columns" id="songbuttondiv">
+                        <img id="createsong" src="images/button_create.png" alt="Create song" />
+                        <div class="songform_hidden" id="songformdiv">
+                            <ul>
+                                <li class="append field">
+                                    <input class="normal narrow text input" id="songname" type="text" name="songname" placeholder="Song name" />
+                                    <div class="medium warning btn" id="newPublic"><button title="On (default) to display in both lists, off to display only on your list">Public</button></div>
+                                    <div class="medium primary btn"><button id="submitsongform">Create</button></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>  <!-- End Navbar -->
+
+<!-- Controls -->
+<div id="controls" class="hidden">
     <div class="row">
 
-      <div class="three columns" id="controlPanel">
-        <ul>
-          <li style="max-height: 4.8em;">
-            <img id="play" src="images/button_play.png">
-          </li>
-          <li>
-            <h4 class="panelHeaders">Tracks</h4>
-            <div class="sixteen columns" id="trackinfo">
-              <div class="row">
-                <div class="four columns">
-                  <img id="ch0" class="channel" src="images/button_ch0.png">
-                </div>
-                <div class="twelve columns musician">
-                  <span id="user1"></span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="four columns">
-                  <img id="ch1" class="channel" src="images/button_ch1.png">
-                </div>
-                <div class="twelve columns musician">
-                  <span id="user2"></span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="four columns">
-                  <img id="ch2" class="channel" src="images/button_ch2.png">
-                </div>
-                <div class="twelve columns musician">
-                  <span id="user3"></span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="four columns">
-                  <img id="ch3" class="channel" src="images/button_ch3.png">
-                </div>
-                <div class="twelve columns musician">
-                  <span id="user4"></span>
-                </div>
-              </div>
+        <div class="three columns" id="controlPanel">
+            <ul>
+                <li style="max-height: 4.8em;">
+                    <img id="play" src="images/button_play.png" alt="Play song" />
+                </li>
+                <li>
+                    <h4 class="panelHeaders">Tracks</h4>
+                    <div class="sixteen columns" id="trackinfo">
+                        <div class="row">
+                            <div class="four columns">
+                                <img id="ch0" class="channel" src="images/button_ch0.png" alt="Channel 1" />
+                            </div>
+                            <div class="twelve columns musician">
+                                <span id="user1"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="four columns">
+                                <img id="ch1" class="channel" src="images/button_ch1.png" alt="Channel 2" />
+                            </div>
+                            <div class="twelve columns musician">
+                                <span id="user2"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="four columns">
+                                <img id="ch2" class="channel" src="images/button_ch2.png" alt="Channel 3" />
+                            </div>
+                            <div class="twelve columns musician">
+                                <span id="user3"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="four columns">
+                                <img id="ch3" class="channel" src="images/button_ch3.png" alt="Channel 4" />
+                            </div>
+                            <div class="twelve columns musician">
+                                <span id="user4"></span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <h4 class="panelHeaders">Instruments</h4>
+                    <img class="instrument" id="i0" src="images/button_instr_i0.png" alt="Instrument 1" />
+                    <img class="instrument" id="i24" src="images/button_instr_i24.png" alt="Instrument 2" />
+                    <img class="instrument" id="i80" src="images/button_instr_i80.png" alt="Instrument 3" />
+                    <img class="instrument" id="i94" src="images/button_instr_i94.png" alt="Instrument 4" />
+                    <img class="instrument" id="i39" src="images/button_instr_i39.png" alt="Instrument 5" />
+                    <img class="instrument" id="i117" src="images/button_instr_i117.png" alt="Instrument 6" />
+                </li>
+            </ul>
+        </div> <!-- end control panel -->
+
+        <div class="twelve columns">
+            <div class="row">
+                <div class="sixteen columns">
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m0" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m1" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m2" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m3" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m4" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m5" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m6" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m7" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m8" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m9" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m10" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m11" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m12" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m13" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m14" src="images/button_note.png" alt="Time marker" /></div></div>
+                    <div class="one columns"><div class="marker"><img class="markerimg" id="m15" src="images/button_note.png" alt="Time marker" /></div></div>
+                </div> <!-- end sixteen columns -->
+            </div> <!-- end row -->
+            <div id="sequence">
+
             </div>
-          </li>
-          <li>
-            <h4 class="panelHeaders">Instruments</h4>
-            <img class="instrument" id="i0" src="images/button_instr_i0.png">
-            <img class="instrument" id="i24" src="images/button_instr_i24.png">
-            <img class="instrument" id="i80" src="images/button_instr_i80.png">
-            <img class="instrument" id="i94" src="images/button_instr_i94.png">
-            <img class="instrument" id="i39" src="images/button_instr_i39.png">
-            <img class="instrument" id="i117" src="images/button_instr_i117.png">
-          </li>
-        </ul>
-      </div> <!-- end control panel -->
+        </div> <!-- end twelve columns -->
 
-      <div class="twelve columns">
-        <div class="row">
-          <div class="sixteen columns">
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m0" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m1" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m2" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m3" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m4" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m5" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m6" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m7" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m8" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m9" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m10" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m11" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m12" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m13" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m14" src="images/button_note.png"></div></div>
-            <div class="one columns"><div class="marker"><img class="markerimg" id="m15" src="images/button_note.png"></div></div>
-          </div> <!-- end sixteen columns -->
-        </div> <!-- end row -->
-        <div id="sequence">
+        <div class="one columns">
+            <div id="title">
 
+            </div>
         </div>
-      </div> <!-- end twelve columns -->
-
-      <div class="one columns">
-        <div id="title">
-
-        </div>
-      </div>
-    </div> <!-- end row -->    
-  </div> <!-- end controls -->
+    </div> <!-- end row -->
+</div> <!-- end controls -->
 
 </body>
 </html>
