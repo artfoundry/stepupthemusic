@@ -1,4 +1,5 @@
 **Note**
+
 [update - 6/2/17] This app no longer works in Safari due to changes in the browser.  Please use Chrome or (shudder) IE.
 
 Step Up The Music
